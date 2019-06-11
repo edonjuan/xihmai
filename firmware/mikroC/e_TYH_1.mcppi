@@ -24,8 +24,9 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-Count=1
+Count=2
 File0=e_TYH_1.c
+File1=libraries\th02.h
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -38,7 +39,8 @@ Path0=C:\Users\lalod\OneDrive\Documentos\Mikroelektronika\mikroC PRO for PIC\Def
 Path1=C:\Users\lalod\OneDrive\Documentos\Mikroelektronika\mikroC PRO for PIC\uses\P18\
 Path2=C:\Users\lalod\Downloads\Github\xihmai\firmware\mikroC\
 [HEADER_PATH]
-Count=0
+Count=1
+Path0=C:\Users\lalod\Downloads\Github\xihmai\firmware\mikroC\libraries\
 [HEADERS]
 Count=0
 [PLDS]
@@ -102,4 +104,5 @@ File53=UART
 File54=USB
 [EXPANDED_NODES]
 Node0=Sources
-Count=1
+Node1=Output Files
+Count=2

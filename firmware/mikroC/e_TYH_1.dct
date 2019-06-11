@@ -831,6 +831,8 @@ gen_enable
 gen_read
 gen_write
 get_fosc_khz
+gethumidity
+gettemperature
 gie
 gie_bit
 gie_gieh
@@ -2267,6 +2269,7 @@ tft_write_data
 tft_write_data_ptr
 tft_write_text
 tft_write_text_return_pos
+th02init
 time_datetoepoch
 time_epochtodate
 time_jd1970

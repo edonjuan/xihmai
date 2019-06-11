@@ -1,6 +1,16 @@
 // Sensors library
 // Temperature & humidity from TH02 (I2C)
 
+void th02Init(void)
+{
+   I2C1_Init(100000);         // Initialize I2C communication
+   delay_ms(100);
+
+   ADCON1=0x0F;               // PortB as digital
+   INTCON2.RBPU=0;            // Pull-up resistors
+   PORTB=0;                   // Clear PORTB
+}
+
 float getTemperature(void)
 {
    float temperature;
