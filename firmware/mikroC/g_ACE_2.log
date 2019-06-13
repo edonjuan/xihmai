@@ -1,0 +1,21 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP16F1826 -DL -O11111114 -fo20 -N"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16_Enh\" -SP"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16_Enh\" -IP"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\" "g_ACE_2.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_I2C_b14.mcl" "__Lib_UART_b21.mcl"	 
+hint: 0	1139	Available RAM: 240 [bytes], Available ROM: 2048 [bytes]	 
+error: 6	304	 error: Can't open include file "pic18f4550.h"     #include <pic18f4550.h>	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.c
+error: 9	304	 error: Can't open include file "usart_header_file.h"     #include "USART_Header_File.h"	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.c
+error: 10	304	 error: Can't open include file "i2c_master_file.h"     #include "I2C_Master_File.h"	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.c
+error: 11	304	 error: Can't open include file "mpu6050_res_define.h"     #include "MPU6050_res_define.h"	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.c
+error: 12	304	 error: Can't open include file "configuration_header_file.h"     #include "Configuration_header_file.h" 5 errors in preprocessor.	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_2.c
+diagnostics: 0	122	Compilation Started	stdlib.h
+error: 16	324	Undeclared identifier 'MSdelay' in expression	g_ACE_2.c
+error: 17	324	Undeclared identifier 'I2C_Start_Wait' in expression	g_ACE_2.c
+error: 18	324	Undeclared identifier 'SMPLRT_DIV' in expression	g_ACE_2.c
+error: 22	324	Undeclared identifier 'I2C_Start_Wait' in expression	g_ACE_2.c
+error: 23	324	Undeclared identifier 'PWR_MGMT_1' in expression	g_ACE_2.c
+error: 27	324	Undeclared identifier 'I2C_Start_Wait' in expression	g_ACE_2.c
+error: 28	324	Undeclared identifier 'CONFIG' in expression	g_ACE_2.c
+error: 32	324	Undeclared identifier 'I2C_Start_Wait' in expression	g_ACE_2.c
+error: 33	324	Undeclared identifier 'GYRO_CONFIG' in expression	g_ACE_2.c
+error: 37	324	Undeclared identifier 'I2C_Start_Wait' in expression	g_ACE_2.c
+error: 38	324	Undeclared identifier 'INT_ENABLE' in expression	g_ACE_2.c
+error: 41	312	Internal error ''	g_ACE_2.c
+error: 0	102	Finished (with errors): 13 jun. 2019, 12:12:53	g_ACE_2.mcppi
