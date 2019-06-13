@@ -30,8 +30,8 @@ abden
 abden_bit
 abdovf
 abdovf_bit
+accel
 access
-ace1_init
 ackdt
 ackdt_bit
 acken
@@ -141,6 +141,7 @@ btsee
 btsee_bit
 btsef
 btsef_bit
+buff
 byte2double
 bytetohex
 bytetostr
@@ -491,10 +492,11 @@ fsr2
 fsr2h
 fsr2l
 fsr2ptr
+g_ace_1
 gcen
 gcen_bit
 get_fosc_khz
-getaxis
+getaccel
 gethumidity
 gettemperature
 gie
@@ -1425,6 +1427,7 @@ txip_bit
 txreg
 txsta
 txt
+tyt
 ua
 ua_bit
 uaddr

@@ -1,10 +1,15 @@
 #include "th02.h"
- //  (ok)
-float ok, cool ;
-char txt[20];
 
-void ACE1_Init(void)
-{
+
+   char txt[20];
+
+   float accel, cool,ok;
+   unsigned int buff;
+   char tyt[20];
+
+void g_ACE_1(void)
+{   
+
    I2C1_Init(100000);         // Initialize I2C communication
    delay_ms(100);
 
@@ -14,40 +19,37 @@ void ACE1_Init(void)
 }
 
 
-float getAxis(void)
-{
-   float Axis;
-   unsigned int buff;
+float getaccel(void)
+{  
+
+   
+   float acel;
 
    I2C1_Start();
    I2C1_Wr(0x68);                // Address Device + Write
-   I2C1_Wr(0x03);                // Address Pointer
-   I2C1_Wr(0x72);                // Register Data
+   //ack
+   //I2C1_Wr(0x72);                // Address Pointer
+   I2C1_Wr(0x33);                // Register Data
+   //I2C1_repeated_Start();
+   I2C1_Wr(0x00);
+    //acel =  I2C1_Rd(0);
+   //buff |=  I2C1_Rd(0);
    I2C1_Stop();
 
-   delay_ms(80);                 // Conversion time (MAX = 40ms)
 
-   I2C1_Start();
-   I2C1_Wr(0x68);                // Address Device + Write
-   I2C1_Wr(0x73);                // Address Pointer
-   I2C1_Repeated_start();
-   I2C1_Wr(0x69);                // Address Device + Read
-   buff =  I2C1_Rd(1) << 8;
-   buff |=  I2C1_Rd(0);
-   I2C1_Stop();
+   return 1.25;
 
-   buff >>= 2;                 // Equation from data sheet
-   Axis = buff;
-   Axis = (Axis/32)-50;
-
-   return Axis;
 }
 
-void main() {
- uart1_init(9600);
- ACE1_Init();
-   
-   //---------------------------------------------------------------------------
+
+void main()
+{
+   uart1_init(9600);
+   g_ACE_1();
+   uart1_write_text("It goes");
+   uart1_write_text("\r\n");
+   uart1_write_text("\r\n");
+   // th02init();
 
 
   while(1){
@@ -56,15 +58,27 @@ void main() {
    floattostr(ok,txt);
    uart1_write_text(txt);
       uart1_write_text("\r\n");
+      uart1_write_text("\r\n");
+   delay_ms(1000);
+
+   uart1_write_text("while");
+   uart1_write_text("\r\n");
+   uart1_write_text("\r\n");
+   
+   buff = getaccel();
+   //buff=46.32;
+   
+   uart1_write_text("convertion");
+   uart1_write_text("\r\n");
+   
+   floattostr(buff,tyt);
+   uart1_write_text(tyt);
+   uart1_write_text("\r\n");
    delay_ms(1000);
 
 
-   cool = getAxis();
-   floattostr(cool,txt);
-   uart1_write_text(txt);
-      uart1_write_text("\r\n");
-
       }
+     uart1_write_text("termina");
 
    
    
