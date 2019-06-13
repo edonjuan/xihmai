@@ -1,25 +1,27 @@
 
 #include "Metodos_DS1307.h"
-#include "th02.h"
+
 
 
 void main() {
         int hora, minutos, segundos, dia, mes, ano, dia_semana;
-        th02Init();
+        ADCON1=0x0F;
+        INTCON2.RBPU=0;
+        PORTB=0;
         UART1_Init(9600);               // Initialize UART module at 9600 bps
         Delay_ms(100);
-
+        
         I2C1_Init(100000);
-        //set_Fecha_hora(segundos,minutos,hora,dia_semana,dia,mes,ano);
+        //set_datos_DS1307(segundos,minutos,hora,dia_semana,dia,mes,ano);
         while(1){
-            segundos   = Leer(0xD0,0);
-            minutos    = Leer(0xD0,1);
-            hora       = Leer(0xD0,2);
-            dia_semana = Leer(0xD0,3);
-            dia        = Leer(0xD0,4);
-            mes        = Leer(0xD0,5);
-            ano        = Leer(0xD0,6);
-
+            segundos   = Leer_DS1307(0xD0,0);
+            minutos    = Leer_DS1307(0xD0,1);
+            hora       = Leer_DS1307(0xD0,2);
+            dia_semana = Leer_DS1307(0xD0,3);
+            dia        = Leer_DS1307(0xD0,4);
+            mes        = Leer_DS1307(0xD0,5);
+            ano        = Leer_DS1307(0xD0,6);
+            
             segundos   = Bcd2Dec(segundos);
             minutos    = Bcd2Dec(minutos);
             hora       = Bcd2Dec(hora);
@@ -27,9 +29,9 @@ void main() {
             dia        = Bcd2Dec(dia);
             mes        = Bcd2Dec(mes);
             ano        = Bcd2Dec(ano);
+            
 
-
-
+            
             UART1_Write_Text("HORA: ");
 
             UART1_Write( (hora/10) + 48 );
@@ -53,6 +55,6 @@ void main() {
             UART1_Write( (ano%10) + 48 );
             UART1_Write_Text("\r\n   \r\n");
             delay_ms(1000);
-
+            
         }
 }
