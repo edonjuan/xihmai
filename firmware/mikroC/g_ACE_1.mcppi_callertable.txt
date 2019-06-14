@@ -48,6 +48,16 @@ main
 			____DoIFC
 		I2C1_Wr
 			____DoIFC
+		I2C1_Repeated_Start
+			____DoIFC
+		I2C1_Rd
+			____DoIFC
+		byte2double
+			NRM4032
+				SETFUN32
+				FIXSIGN32
+				SETFOV32
+				RES032
 		I2C1_Stop
 	double2word
 		SETIOV3224
