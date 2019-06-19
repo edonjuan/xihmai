@@ -1,4 +1,4 @@
-#line 1 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_1.c"
+#line 1 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
 #line 1 "c:/users/uteq/documents/github/xihmai/firmware/mikroc/libraries/th02.h"
 
 
@@ -76,89 +76,35 @@ float getHumidity(void)
 
  return humidity;
 }
-#line 6 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_1.c"
+#line 7 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  char txt[20];
 
  float accel, cool,ok;
  unsigned int buff;
  char tyt[20];
 
-void g_ACE_1(void)
-{
- I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start, &I2C1_Wr, &I2C1_Wr, &I2C1_Stop, &I2C1_Is_Idle);
 
-
- I2C1_Init(100000);
- delay_ms(100);
-
- ADCON1=0x0F;
- INTCON2.RBPU=0;
- PORTB=0;
-
-
-
-}
-
-
-float getaccel(void)
-{
- unsigned short take;
-
-
-
- float acel;
-
- I2C1_Start();
- I2C1_Wr(0x68);
- I2C1_Wr(0x6B);
- I2C1_Wr(0b00000000);
- I2C1_Wr(0x1C);
- I2C1_Wr(0b00011000);
- I2C1_Wr(0x75);
- I2C1_Wr(0x68);
- I2C1_Stop();
-
-
-
-
- I2C1_Start();
- I2C1_Wr(0x68);
- I2C1_Wr(0x32);
-
- I2C1_Stop();
- Delay_100ms();
-
-
- I2C1_repeated_Start();
- I2C1_Wr(0x69);
-
-
-
-
-
- take = I2C1_Rd(0);
- uart1_write_text("It still goes");
- uart1_write_text("\r\n");
-
- acel=take;
-
- I2C1_Stop();
- return acel;
-
-}
 
 
 void main()
 {
  uart1_init(9600);
- g_ACE_1();
  uart1_write_text("It goes");
  uart1_write_text("\r\n");
  uart1_write_text("\r\n");
 
+ I2C1_Init(100000);
+ TH02Init();
 
+ while(1)
+ {
+ cool= getHumidity ();
+ uart1_write_text("humidity:");
+ uart1_write_text("\r\n");
+ floattostr(cool,txt);
+ uart1_write_text(txt);
+ uart1_write_text("\r\n");
 
- while(1){
  uart1_write_text("temperture:");
  uart1_write_text("\r\n");
  ok = getTemperature();
@@ -168,31 +114,46 @@ void main()
  uart1_write_text("\r\n");
  delay_ms(1000);
 
- uart1_write_text("while");
+
+
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x6B);
+ I2C1_Wr(0x00);
+ I2C1_Stop();
+ delay_ms(100);
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x1C);
+ I2C1_Wr(0x18);
+ I2C1_Stop();
+ delay_ms(100);
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x75);
+ I2C1_Wr(0x68);
+ I2C1_Stop();
+ delay_ms(100);
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x42);
+ I2C1_Repeated_Start();
+ I2C1_Wr( 0xD1 );
+ uart1_write_text("Start reading1:");
+ buff = I2C1_Rd(0);
+ I2C1_Stop();
+ delay_ms(100);
+
+ inttostr(buff, txt);
+ uart1_write_text(txt);
  uart1_write_text("\r\n");
  uart1_write_text("\r\n");
 
- buff = getaccel();
-
-
- uart1_write_text("convertion");
- uart1_write_text("\r\n");
-
-
-
- floattostr(buff,tyt);
- uart1_write_text(tyt);
- uart1_write_text("\r\n");
- delay_ms(1000);
-
-
- uart1_write_text("");
- uart1_write_text("\r\n");
 
  }
-
-
-
-
-
 }

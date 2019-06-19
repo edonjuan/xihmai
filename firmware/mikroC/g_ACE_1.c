@@ -11,6 +11,8 @@
 
 void g_ACE_1(void)
 {   
+   I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start, &I2C1_Wr, &I2C1_Wr, &I2C1_Stop, &I2C1_Is_Idle); // Sets the I2C1 module active
+
 
    I2C1_Init(100000);         // Initialize I2C communication
    delay_ms(100);
@@ -32,21 +34,41 @@ float getaccel(void)
 
    float acel;
 
+   I2C1_Start();                  // configuring device
+   I2C1_Wr(0x68);                // Address Device + Write
+   I2C1_Wr(0x6B);
+   I2C1_Wr(0b00000000);
+   I2C1_Wr(0x1C);
+   I2C1_Wr(0b00011000);
+   I2C1_Wr(0x75);
+   I2C1_Wr(0x68);
+   I2C1_Stop();
+    //yes
+    
+
+   
    I2C1_Start();
    I2C1_Wr(0x68);                // Address Device + Write
-
-                                         /*I2C1_Wr(0x72);    // Address Pointer  */
-   I2C1_Wr(0x33);                // Register Data
-   I2C1_repeated_Start();
-   I2C1_Wr(0x69);
-   I2C1_Rd(take);                /*aqui sigue NOT Acnowledge*/
-   take = I2C1_Rd(0);
-    /*acel =  I2C1_Rd(0);    */
-   /*buff |=  I2C1_Rd(0);      */
-   acel=I2C1_Rd(1);
+   I2C1_Wr(0x32);                // Register Data
+     //yes
    I2C1_Stop();
+   Delay_100ms();
 
 
+   I2C1_repeated_Start();
+   I2C1_Wr(0x69); 
+        //yes
+        
+   //I2C1_Rd(1);
+   //I2C1_Wr(0x33);
+   
+   take =  I2C1_Rd(0);
+   uart1_write_text("It still goes");
+      uart1_write_text("\r\n");
+      
+   acel=take;
+
+   I2C1_Stop();
    return acel;
 
 }
@@ -63,7 +85,8 @@ void main()
 
 
   while(1){
-
+   uart1_write_text("temperture:");
+   uart1_write_text("\r\n");
    ok = getTemperature();                /*temperture*/
    floattostr(ok,txt);
    uart1_write_text(txt);
