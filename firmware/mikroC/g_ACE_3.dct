@@ -237,6 +237,7 @@ cmif
 cmif_bit
 cmip
 cmip_bit
+cofe
 comfrem
 compare_double
 cool
@@ -634,6 +635,7 @@ irvst
 irvst_bit
 ivrst
 ivrst_bit
+jugar
 lata
 lata0
 lata0_bit
@@ -1425,7 +1427,6 @@ txip_bit
 txreg
 txsta
 txt
-tyt
 ua
 ua_bit
 uaddr

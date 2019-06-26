@@ -76,12 +76,13 @@ float getHumidity(void)
 
  return humidity;
 }
-#line 7 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+#line 6 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  char txt[20];
 
  float accel, cool,ok;
- unsigned int buff;
- char tyt[20];
+ signed int buff, cofe;
+ signed char jugar;
+
 
 
 
@@ -89,34 +90,29 @@ float getHumidity(void)
 void main()
 {
  uart1_init(9600);
- uart1_write_text("It goes");
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
-
  I2C1_Init(100000);
  TH02Init();
 
- while(1)
- {
- cool= getHumidity ();
- uart1_write_text("humidity:");
- uart1_write_text("\r\n");
- floattostr(cool,txt);
- uart1_write_text(txt);
- uart1_write_text("\r\n");
-
- uart1_write_text("temperture:");
- uart1_write_text("\r\n");
- ok = getTemperature();
- floattostr(ok,txt);
- uart1_write_text(txt);
+ uart1_write_text("STARTING");
  uart1_write_text("\r\n");
  uart1_write_text("\r\n");
- delay_ms(1000);
 
 
 
+ I2C1_Start();
+ delay_ms(100);
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x19);
+ I2C1_Wr(0x4F);
+ I2C1_Stop();
+ delay_ms(100);
 
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x1A);
+ I2C1_Wr(0b00000111);
+ I2C1_Stop();
+ delay_ms(100);
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
@@ -127,33 +123,52 @@ void main()
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
- I2C1_Wr(0x1C);
- I2C1_Wr(0x18);
+ I2C1_Wr(0x1B);
+ I2C1_Wr(0x00);
  I2C1_Stop();
  delay_ms(100);
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
- I2C1_Wr(0x75);
- I2C1_Wr(0x68);
+ I2C1_Wr(0x1C);
+ I2C1_Wr(0x00);
  I2C1_Stop();
  delay_ms(100);
+#line 87 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ while(1)
+ {
+#line 108 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x41);
+ I2C1_Repeated_Start();
+ I2C1_Wr( 0xD1 );
+ buff = I2C1_Rd(0);
+ I2C1_Stop();
+ delay_ms(100);
+
+
+ inttostr(buff, txt);
+ uart1_write_text(txt);
+ uart1_write_text("\r\n");
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x42);
  I2C1_Repeated_Start();
  I2C1_Wr( 0xD1 );
- uart1_write_text("Start reading1:");
- buff = I2C1_Rd(0);
+ cofe = I2C1_Rd(0);
  I2C1_Stop();
  delay_ms(100);
 
+ inttostr(cofe, txt);
+ uart1_write_text(txt);
+ uart1_write_text("\r\n");
+
+ cofe=(cofe <<8)| buff;
  inttostr(buff, txt);
  uart1_write_text(txt);
  uart1_write_text("\r\n");
- uart1_write_text("\r\n");
-
-
+#line 330 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  }
 }
