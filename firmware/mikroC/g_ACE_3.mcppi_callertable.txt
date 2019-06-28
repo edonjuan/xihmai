@@ -4,8 +4,6 @@ main
 	I2C1_Init
 	th02Init
 		I2C1_Init
-	UART1_Write_Text
-		UART1_Write
 	I2C1_Start
 		I2C1_Is_Idle
 		____DoIFC
@@ -16,6 +14,11 @@ main
 		____DoIFC
 	I2C1_Rd
 		____DoIFC
+	UART1_Write
+	UART1_Write_Text
+		UART1_Write
+	double2int
+		SETIOV3224
 	IntToStr
 		WordToStr
 			Div_16X16_U

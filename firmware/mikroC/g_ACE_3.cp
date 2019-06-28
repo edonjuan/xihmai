@@ -79,8 +79,8 @@ float getHumidity(void)
 #line 6 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  char txt[20];
 
- float accel, cool,ok;
- signed int buff, cofe;
+ long double accel, cool,ok, finally;
+ unsigned int buff, cofe, test ;
  signed char jugar;
 
 
@@ -92,32 +92,26 @@ void main()
  uart1_init(9600);
  I2C1_Init(100000);
  TH02Init();
-
- uart1_write_text("STARTING");
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
-
-
-
+#line 28 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  I2C1_Start();
  delay_ms(100);
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x19);
- I2C1_Wr(0x4F);
+ I2C1_Wr(0x07);
  I2C1_Stop();
  delay_ms(100);
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x1A);
- I2C1_Wr(0b00000111);
+ I2C1_Wr(0b00000000);
  I2C1_Stop();
  delay_ms(100);
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x6B);
- I2C1_Wr(0x00);
+ I2C1_Wr(0x01);
  I2C1_Stop();
  delay_ms(100);
 
@@ -137,7 +131,7 @@ void main()
 #line 87 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  while(1)
  {
-#line 108 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+#line 106 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x41);
@@ -148,9 +142,10 @@ void main()
  delay_ms(100);
 
 
- inttostr(buff, txt);
- uart1_write_text(txt);
- uart1_write_text("\r\n");
+
+
+ uart1_write(buff);
+
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
@@ -159,16 +154,37 @@ void main()
  I2C1_Wr( 0xD1 );
  cofe = I2C1_Rd(0);
  I2C1_Stop();
- delay_ms(100);
 
- inttostr(cofe, txt);
- uart1_write_text(txt);
+
+
+
+ uart1_write(cofe);
+ delay_ms(500);
+ uart1_write_text("\r\n");
+ uart1_write_text("\r\n");
  uart1_write_text("\r\n");
 
- cofe=(cofe <<8)| buff;
- inttostr(buff, txt);
- uart1_write_text(txt);
+
+ buff=(buff<<8);
+ buff=buff | cofe;
+#line 150 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ buff=!buff;
+ buff=(buff | (0x01));
+ if(buff>=32768)
+ buff= buff & (0xFFFF);
+
+ uart1_write(buff );
  uart1_write_text("\r\n");
-#line 330 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+
+ intToStr(finally, txt);
+ uart1_write_text("Temp final :                ");
+ uart1_write_text(txt);
+ uart1_write_text("°C ");
+ uart1_write_text("\r\n");
+ delay_ms(5000);
+
+ ~buff;
+#line 392 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  }
 }
