@@ -48,12 +48,11 @@ File1=I2C
 File2=Conversions
 File3=C_String
 File4=C_Type
-File5=C_Stdlib
-Count=6
+Count=5
 [EXPANDED_NODES]
 Count=0
 [LIB_EXPANDED_NODES]
 0=mikroE Libraries
 1=System Libraries
-94=C_Stdlib
+222=I2C
 Count=3
