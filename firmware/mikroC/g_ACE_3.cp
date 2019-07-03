@@ -138,27 +138,30 @@ void main()
 
 
 
+
  I2C1_Start();
- delay_ms(100);
- I2C1_Wr( 0xD0 );
+ I2C1_Wr(0xD0);
  I2C1_Wr(0x19);
  I2C1_Wr(0x07);
  I2C1_Stop();
  delay_ms(100);
 
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x1A);
- I2C1_Wr(0b00000000);
- I2C1_Stop();
- delay_ms(100);
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x6B);
- I2C1_Wr(0x01);
+ I2C1_Wr(0x00);
  I2C1_Stop();
  delay_ms(100);
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x6C);
+ I2C1_Wr(0x00);
+ I2C1_Stop();
+ delay_ms(100);
+
 
  I2C1_Start();
  I2C1_Wr( 0xD0 );
@@ -173,89 +176,68 @@ void main()
  I2C1_Wr(0x00);
  I2C1_Stop();
  delay_ms(100);
-#line 109 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+ I2C1_Start();
+ delay_ms(100);
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x38);
+ I2C1_Wr(0x40);
+ I2C1_Stop();
+ delay_ms(100);
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x20);
+ I2C1_Wr(0x01);
+ I2C1_Stop();
+ delay_ms(100);
+
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x3A);
  I2C1_Wr(0x01);
  I2C1_Stop();
  delay_ms(100);
-#line 137 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x1F);
+ I2C1_Wr(0x14);
+ I2C1_Stop();
+ delay_ms(200);
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x1A);
+ I2C1_Wr(0x07);
+ I2C1_Stop();
  delay_ms(100);
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x6C);
+ I2C1_Wr(0x60);
+ I2C1_Stop();
+ delay_ms(100);
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x6B);
+ I2C1_Wr(0x10);
+ I2C1_Stop();
+ delay_ms(100);
+#line 170 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ delay_ms(200);
+
+
 
  while(1)
  {
- uart1_write_text("GO ON");
- uart1_write_text("\r\n");
-#line 358 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3B);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- buff = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-#line 372 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3C);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- cofe = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-#line 388 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- buff=(buff<<8);
- buff=buff | cofe;
-#line 398 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- finally=buff;
- finally= ((finally * 2)/16386);
-
-
- FloatToStr(finally, txt);
- uart1_write_text("ACCEL X: ");
- uart1_write_text(txt);
- uart1_write_text("°C ");
- uart1_write_text("\r\n");
-
-
-
-
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3D);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- buff = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-#line 425 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3E);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- cofe = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-#line 441 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- buff=(buff<<8);
- buff=buff | cofe;
-#line 451 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- finally=buff;
- finally= ((finally * 2)/16386);
-
-
- FloatToStr(finally, txt);
- uart1_write_text("ACCEL Y: ");
- uart1_write_text(txt);
- uart1_write_text("°C ");
- uart1_write_text("\r\n");
-
-
-
-
+#line 494 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x3F);
@@ -263,8 +245,13 @@ void main()
  I2C1_Wr( 0xD1 );
  buff = I2C1_Rd(0);
  I2C1_Stop();
- delay_ms(10000);
-#line 478 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ delay_ms(100);
+
+ inttostr(buff, txt);
+ uart1_write_text(txt);
+ uart1_write_text("\r\n");
+
+
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x40);
@@ -273,19 +260,12 @@ void main()
  cofe = I2C1_Rd(0);
  I2C1_Stop();
  delay_ms(100);
-#line 494 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- buff=(buff<<8);
- buff=buff | cofe;
-#line 504 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- finally=buff;
- finally= ((finally * 2)/16386);
 
-
- FloatToStr(finally, txt);
- uart1_write_text("ACCEL Z: ");
+ inttostr(cofe, txt);
  uart1_write_text(txt);
- uart1_write_text("°C ");
  uart1_write_text("\r\n");
-#line 524 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+ uart1_write_text("\r\n");
+ uart1_write_text("\r\n");
+#line 554 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  }
 }

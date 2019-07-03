@@ -231,10 +231,10 @@ L_getHumidity2:
 	MOVF        R2, 0 
 	SUBLW       7
 	BTFSS       STATUS+0, 2 
-	GOTO        L__getHumidity30
+	GOTO        L__getHumidity32
 	MOVF        R1, 0 
 	SUBLW       192
-L__getHumidity30:
+L__getHumidity32:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_getHumidity3
 ;th02.h,68 :: 		humidity = 1984;
@@ -252,10 +252,10 @@ L_getHumidity3:
 	MOVLW       1
 	SUBWF       getHumidity_buffer_L0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__getHumidity31
+	GOTO        L__getHumidity33
 	MOVLW       128
 	SUBWF       getHumidity_buffer_L0+0, 0 
-L__getHumidity31:
+L__getHumidity33:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_getHumidity5
 ;th02.h,70 :: 		humidity = 384;
@@ -418,25 +418,9 @@ _main:
 	MOVLW       hi_addr(?lstr11_g_ACE_3+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,66 :: 		I2C1_Start();
+;g_ACE_3.c,67 :: 		I2C1_Start();                // Configuring MPU6050 and interruption
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,67 :: 		delay_ms(100);
-	MOVLW       3
-	MOVWF       R11, 0
-	MOVLW       138
-	MOVWF       R12, 0
-	MOVLW       85
-	MOVWF       R13, 0
-L_main11:
-	DECFSZ      R13, 1, 1
-	BRA         L_main11
-	DECFSZ      R12, 1, 1
-	BRA         L_main11
-	DECFSZ      R11, 1, 1
-	BRA         L_main11
-	NOP
-	NOP
-;g_ACE_3.c,68 :: 		I2C1_Wr(ADW);                // 19 x(4F)
+;g_ACE_3.c,68 :: 		I2C1_Wr(0xD0);                          // 19 x(4F)
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
@@ -457,6 +441,37 @@ L_main11:
 	MOVWF       R12, 0
 	MOVLW       85
 	MOVWF       R13, 0
+L_main11:
+	DECFSZ      R13, 1, 1
+	BRA         L_main11
+	DECFSZ      R12, 1, 1
+	BRA         L_main11
+	DECFSZ      R11, 1, 1
+	BRA         L_main11
+	NOP
+	NOP
+;g_ACE_3.c,75 :: 		I2C1_Start();
+	CALL        _I2C1_Start+0, 0
+;g_ACE_3.c,76 :: 		I2C1_Wr(ADW);                // 6B   yes (RESETS ALL)(new)
+	MOVLW       208
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,77 :: 		I2C1_Wr(0x6B);
+	MOVLW       107
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,78 :: 		I2C1_Wr(0x00);
+	CLRF        FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,79 :: 		I2C1_Stop();
+	CALL        _I2C1_Stop+0, 0
+;g_ACE_3.c,80 :: 		delay_ms(100);
+	MOVLW       3
+	MOVWF       R11, 0
+	MOVLW       138
+	MOVWF       R12, 0
+	MOVLW       85
+	MOVWF       R13, 0
 L_main12:
 	DECFSZ      R13, 1, 1
 	BRA         L_main12
@@ -466,22 +481,22 @@ L_main12:
 	BRA         L_main12
 	NOP
 	NOP
-;g_ACE_3.c,74 :: 		I2C1_Start();
+;g_ACE_3.c,83 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,75 :: 		I2C1_Wr(ADW);                // 1A   (0b00000111)
+;g_ACE_3.c,84 :: 		I2C1_Wr(ADW);                // 6C il manque les premier deux zeros pour wake-ups
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,76 :: 		I2C1_Wr(0x1A);
-	MOVLW       26
+;g_ACE_3.c,85 :: 		I2C1_Wr(0x6C);               // bits 7 y 6
+	MOVLW       108
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,77 :: 		I2C1_Wr(0b00000000);
+;g_ACE_3.c,86 :: 		I2C1_Wr(0x00);
 	CLRF        FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,78 :: 		I2C1_Stop();
+;g_ACE_3.c,87 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,79 :: 		delay_ms(100);
+;g_ACE_3.c,88 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -497,23 +512,22 @@ L_main13:
 	BRA         L_main13
 	NOP
 	NOP
-;g_ACE_3.c,81 :: 		I2C1_Start();
+;g_ACE_3.c,91 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,82 :: 		I2C1_Wr(ADW);                // 6B   yes (RESETS ALL)(new)
+;g_ACE_3.c,92 :: 		I2C1_Wr(ADW);                // 1B    yes (18)
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,83 :: 		I2C1_Wr(0x6B);
-	MOVLW       107
+;g_ACE_3.c,93 :: 		I2C1_Wr(0x1B);
+	MOVLW       27
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,84 :: 		I2C1_Wr(0x01);
-	MOVLW       1
-	MOVWF       FARG_I2C1_Wr_data_+0 
+;g_ACE_3.c,94 :: 		I2C1_Wr(0x00);
+	CLRF        FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,85 :: 		I2C1_Stop();
+;g_ACE_3.c,95 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,86 :: 		delay_ms(100);
+;g_ACE_3.c,96 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -529,22 +543,22 @@ L_main14:
 	BRA         L_main14
 	NOP
 	NOP
-;g_ACE_3.c,88 :: 		I2C1_Start();
+;g_ACE_3.c,98 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,89 :: 		I2C1_Wr(ADW);                // 1B    yes (18)
+;g_ACE_3.c,99 :: 		I2C1_Wr(ADW);                // 1C    yes    (18)
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,90 :: 		I2C1_Wr(0x1B);
-	MOVLW       27
+;g_ACE_3.c,100 :: 		I2C1_Wr(0x1C);
+	MOVLW       28
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,91 :: 		I2C1_Wr(0x00);
+;g_ACE_3.c,101 :: 		I2C1_Wr(0x00);
 	CLRF        FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,92 :: 		I2C1_Stop();
+;g_ACE_3.c,102 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,93 :: 		delay_ms(100);
+;g_ACE_3.c,103 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -560,22 +574,9 @@ L_main15:
 	BRA         L_main15
 	NOP
 	NOP
-;g_ACE_3.c,95 :: 		I2C1_Start();
+;g_ACE_3.c,105 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,96 :: 		I2C1_Wr(ADW);                // 1C    yes    (18)
-	MOVLW       208
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,97 :: 		I2C1_Wr(0x1C);
-	MOVLW       28
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,98 :: 		I2C1_Wr(0x00);
-	CLRF        FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,99 :: 		I2C1_Stop();
-	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,100 :: 		delay_ms(100);
+;g_ACE_3.c,106 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -591,23 +592,21 @@ L_main16:
 	BRA         L_main16
 	NOP
 	NOP
-;g_ACE_3.c,109 :: 		I2C1_Start();
-	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,110 :: 		I2C1_Wr(ADW);                // interrupt data ready (INTERRUPT) STATUS
+;g_ACE_3.c,107 :: 		I2C1_Wr(ADW);                //  38   Activar motion interrupt ( activa el bit (-))
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,111 :: 		I2C1_Wr(0x3A);
-	MOVLW       58
+;g_ACE_3.c,108 :: 		I2C1_Wr(0x38);
+	MOVLW       56
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,112 :: 		I2C1_Wr(0x01);
-	MOVLW       1
+;g_ACE_3.c,109 :: 		I2C1_Wr(0x40);
+	MOVLW       64
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,113 :: 		I2C1_Stop();
+;g_ACE_3.c,110 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,114 :: 		delay_ms(100);
+;g_ACE_3.c,111 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -623,7 +622,23 @@ L_main17:
 	BRA         L_main17
 	NOP
 	NOP
-;g_ACE_3.c,137 :: 		delay_ms(100);
+;g_ACE_3.c,113 :: 		I2C1_Start();
+	CALL        _I2C1_Start+0, 0
+;g_ACE_3.c,114 :: 		I2C1_Wr(ADW);                // Motion interrupt duration
+	MOVLW       208
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,115 :: 		I2C1_Wr(0x20);
+	MOVLW       32
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,116 :: 		I2C1_Wr(0x01);
+	MOVLW       1
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,117 :: 		I2C1_Stop();
+	CALL        _I2C1_Stop+0, 0
+;g_ACE_3.c,118 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -639,46 +654,87 @@ L_main18:
 	BRA         L_main18
 	NOP
 	NOP
-;g_ACE_3.c,139 :: 		while(1)
-L_main19:
-;g_ACE_3.c,141 :: 		uart1_write_text("GO ON");
-	MOVLW       ?lstr12_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr12_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,142 :: 		uart1_write_text("\r\n");
-	MOVLW       ?lstr13_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr13_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,358 :: 		I2C1_Start();
+;g_ACE_3.c,120 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,359 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
+;g_ACE_3.c,121 :: 		I2C1_Wr(ADW);                // interrupt data ready (INTERRUPT) STATUS
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,360 :: 		I2C1_Wr(0x3B);                                  // Address Pointer
-	MOVLW       59
+;g_ACE_3.c,122 :: 		I2C1_Wr(0x3A);
+	MOVLW       58
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,361 :: 		I2C1_Repeated_Start();
-	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,362 :: 		I2C1_Wr(ADR);
-	MOVLW       209
+;g_ACE_3.c,123 :: 		I2C1_Wr(0x01);
+	MOVLW       1
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,363 :: 		buff = I2C1_Rd(0);
-	CLRF        FARG_I2C1_Rd_ack+0 
-	CALL        _I2C1_Rd+0, 0
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVLW       0
-	MOVWF       _buff+1 
-;g_ACE_3.c,364 :: 		I2C1_Stop();
+;g_ACE_3.c,124 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,365 :: 		delay_ms(100);
+;g_ACE_3.c,125 :: 		delay_ms(100);
+	MOVLW       3
+	MOVWF       R11, 0
+	MOVLW       138
+	MOVWF       R12, 0
+	MOVLW       85
+	MOVWF       R13, 0
+L_main19:
+	DECFSZ      R13, 1, 1
+	BRA         L_main19
+	DECFSZ      R12, 1, 1
+	BRA         L_main19
+	DECFSZ      R11, 1, 1
+	BRA         L_main19
+	NOP
+	NOP
+;g_ACE_3.c,128 :: 		I2C1_Start();
+	CALL        _I2C1_Start+0, 0
+;g_ACE_3.c,129 :: 		I2C1_Wr(ADW);                // 1F     Treshold = 100 320mg
+	MOVLW       208
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,130 :: 		I2C1_Wr(0x1F);               // 20=32mg
+	MOVLW       31
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,131 :: 		I2C1_Wr(0x14);
+	MOVLW       20
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,132 :: 		I2C1_Stop();
+	CALL        _I2C1_Stop+0, 0
+;g_ACE_3.c,133 :: 		delay_ms(200);                // delay extra
+	MOVLW       6
+	MOVWF       R11, 0
+	MOVLW       19
+	MOVWF       R12, 0
+	MOVLW       173
+	MOVWF       R13, 0
+L_main20:
+	DECFSZ      R13, 1, 1
+	BRA         L_main20
+	DECFSZ      R12, 1, 1
+	BRA         L_main20
+	DECFSZ      R11, 1, 1
+	BRA         L_main20
+	NOP
+	NOP
+;g_ACE_3.c,136 :: 		I2C1_Start();
+	CALL        _I2C1_Start+0, 0
+;g_ACE_3.c,137 :: 		I2C1_Wr(ADW);                // 1A   (0b00000111)  MOtion HPF HOLD
+	MOVLW       208
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,138 :: 		I2C1_Wr(0x1A);
+	MOVLW       26
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,139 :: 		I2C1_Wr(0x07);
+	MOVLW       7
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,140 :: 		I2C1_Stop();
+	CALL        _I2C1_Stop+0, 0
+;g_ACE_3.c,141 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -694,32 +750,23 @@ L_main21:
 	BRA         L_main21
 	NOP
 	NOP
-;g_ACE_3.c,372 :: 		I2C1_Start();
+;g_ACE_3.c,144 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,373 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
+;g_ACE_3.c,145 :: 		I2C1_Wr(ADW);                // 6C (2) il manque les premier deux zeros pour wake-ups
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,374 :: 		I2C1_Wr(0x3C);                                  // Address Pointer
-	MOVLW       60
+;g_ACE_3.c,146 :: 		I2C1_Wr(0x6C);               // bits 7 y 6
+	MOVLW       108
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,375 :: 		I2C1_Repeated_Start();
-	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,376 :: 		I2C1_Wr(ADR);
-	MOVLW       209
+;g_ACE_3.c,147 :: 		I2C1_Wr(0x60);
+	MOVLW       96
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,377 :: 		cofe =  I2C1_Rd(0);
-	CLRF        FARG_I2C1_Rd_ack+0 
-	CALL        _I2C1_Rd+0, 0
-	MOVF        R0, 0 
-	MOVWF       _cofe+0 
-	MOVLW       0
-	MOVWF       _cofe+1 
-;g_ACE_3.c,378 :: 		I2C1_Stop();
+;g_ACE_3.c,148 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,379 :: 		delay_ms(100);
+;g_ACE_3.c,149 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -735,124 +782,23 @@ L_main22:
 	BRA         L_main22
 	NOP
 	NOP
-;g_ACE_3.c,388 :: 		buff=(buff<<8);
-	MOVF        _buff+0, 0 
-	MOVWF       R1 
-	CLRF        R0 
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,389 :: 		buff=buff  | cofe;                              // deux bytes ensambles
-	MOVF        _cofe+0, 0 
-	IORWF       R0, 1 
-	MOVF        _cofe+1, 0 
-	IORWF       R1, 1 
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,398 :: 		finally=buff;
-	CALL        _word2double+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,399 :: 		finally= ((finally * 2)/16386);
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       128
-	MOVWF       R7 
-	CALL        _Mul_32x32_FP+0, 0
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       4
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       141
-	MOVWF       R7 
-	CALL        _Div_32x32_FP+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,402 :: 		FloatToStr(finally, txt);
-	MOVF        R0, 0 
-	MOVWF       FARG_FloatToStr_fnum+0 
-	MOVF        R1, 0 
-	MOVWF       FARG_FloatToStr_fnum+1 
-	MOVF        R2, 0 
-	MOVWF       FARG_FloatToStr_fnum+2 
-	MOVF        R3, 0 
-	MOVWF       FARG_FloatToStr_fnum+3 
-	MOVLW       _txt+0
-	MOVWF       FARG_FloatToStr_str+0 
-	MOVLW       hi_addr(_txt+0)
-	MOVWF       FARG_FloatToStr_str+1 
-	CALL        _FloatToStr+0, 0
-;g_ACE_3.c,403 :: 		uart1_write_text("ACCEL X: ");
-	MOVLW       ?lstr14_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr14_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,404 :: 		uart1_write_text(txt);
-	MOVLW       _txt+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(_txt+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,405 :: 		uart1_write_text("°C ");
-	MOVLW       ?lstr15_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr15_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,406 :: 		uart1_write_text("\r\n");
-	MOVLW       ?lstr16_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr16_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,411 :: 		I2C1_Start();
+;g_ACE_3.c,152 :: 		I2C1_Start();
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,412 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
+;g_ACE_3.c,153 :: 		I2C1_Wr(ADW);                // 6B   activate cycle
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,413 :: 		I2C1_Wr(0x3D);                                  // Address Pointer
-	MOVLW       61
+;g_ACE_3.c,154 :: 		I2C1_Wr(0x6B);
+	MOVLW       107
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,414 :: 		I2C1_Repeated_Start();
-	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,415 :: 		I2C1_Wr(ADR);
-	MOVLW       209
+;g_ACE_3.c,155 :: 		I2C1_Wr(0x10);
+	MOVLW       16
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,416 :: 		buff = I2C1_Rd(0);
-	CLRF        FARG_I2C1_Rd_ack+0 
-	CALL        _I2C1_Rd+0, 0
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVLW       0
-	MOVWF       _buff+1 
-;g_ACE_3.c,417 :: 		I2C1_Stop();
+;g_ACE_3.c,156 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,418 :: 		delay_ms(100);
+;g_ACE_3.c,157 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
@@ -868,37 +814,12 @@ L_main23:
 	BRA         L_main23
 	NOP
 	NOP
-;g_ACE_3.c,425 :: 		I2C1_Start();
-	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,426 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
-	MOVLW       208
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,427 :: 		I2C1_Wr(0x3E);                                  // Address Pointer
-	MOVLW       62
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,428 :: 		I2C1_Repeated_Start();
-	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,429 :: 		I2C1_Wr(ADR);
-	MOVLW       209
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,430 :: 		cofe =  I2C1_Rd(0);
-	CLRF        FARG_I2C1_Rd_ack+0 
-	CALL        _I2C1_Rd+0, 0
-	MOVF        R0, 0 
-	MOVWF       _cofe+0 
-	MOVLW       0
-	MOVWF       _cofe+1 
-;g_ACE_3.c,431 :: 		I2C1_Stop();
-	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,432 :: 		delay_ms(100);
-	MOVLW       3
+;g_ACE_3.c,170 :: 		delay_ms(200);
+	MOVLW       6
 	MOVWF       R11, 0
-	MOVLW       138
+	MOVLW       19
 	MOVWF       R12, 0
-	MOVLW       85
+	MOVLW       173
 	MOVWF       R13, 0
 L_main24:
 	DECFSZ      R13, 1, 1
@@ -909,275 +830,149 @@ L_main24:
 	BRA         L_main24
 	NOP
 	NOP
-;g_ACE_3.c,441 :: 		buff=(buff<<8);
-	MOVF        _buff+0, 0 
-	MOVWF       R1 
-	CLRF        R0 
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,442 :: 		buff=buff  | cofe;                              // deux bytes ensambles
-	MOVF        _cofe+0, 0 
-	IORWF       R0, 1 
-	MOVF        _cofe+1, 0 
-	IORWF       R1, 1 
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,451 :: 		finally=buff;
-	CALL        _word2double+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,452 :: 		finally= ((finally * 2)/16386);
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       128
-	MOVWF       R7 
-	CALL        _Mul_32x32_FP+0, 0
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       4
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       141
-	MOVWF       R7 
-	CALL        _Div_32x32_FP+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,455 :: 		FloatToStr(finally, txt);
-	MOVF        R0, 0 
-	MOVWF       FARG_FloatToStr_fnum+0 
-	MOVF        R1, 0 
-	MOVWF       FARG_FloatToStr_fnum+1 
-	MOVF        R2, 0 
-	MOVWF       FARG_FloatToStr_fnum+2 
-	MOVF        R3, 0 
-	MOVWF       FARG_FloatToStr_fnum+3 
-	MOVLW       _txt+0
-	MOVWF       FARG_FloatToStr_str+0 
-	MOVLW       hi_addr(_txt+0)
-	MOVWF       FARG_FloatToStr_str+1 
-	CALL        _FloatToStr+0, 0
-;g_ACE_3.c,456 :: 		uart1_write_text("ACCEL Y: ");
-	MOVLW       ?lstr17_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr17_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,457 :: 		uart1_write_text(txt);
-	MOVLW       _txt+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(_txt+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,458 :: 		uart1_write_text("°C ");
-	MOVLW       ?lstr18_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr18_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,459 :: 		uart1_write_text("\r\n");
-	MOVLW       ?lstr19_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr19_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,464 :: 		I2C1_Start();
+;g_ACE_3.c,174 :: 		while(1)
+L_main25:
+;g_ACE_3.c,494 :: 		I2C1_Start();                       // READ R-3F
 	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,465 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
+;g_ACE_3.c,495 :: 		I2C1_Wr(ADW);
 	MOVLW       208
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,466 :: 		I2C1_Wr(0x3F);                                  // Address Pointer
+;g_ACE_3.c,496 :: 		I2C1_Wr(0x3F);
 	MOVLW       63
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,467 :: 		I2C1_Repeated_Start();
+;g_ACE_3.c,497 :: 		I2C1_Repeated_Start();
 	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,468 :: 		I2C1_Wr(ADR);
+;g_ACE_3.c,498 :: 		I2C1_Wr(ADR);
 	MOVLW       209
 	MOVWF       FARG_I2C1_Wr_data_+0 
 	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,469 :: 		buff = I2C1_Rd(0);
+;g_ACE_3.c,499 :: 		buff = I2C1_Rd(0);
 	CLRF        FARG_I2C1_Rd_ack+0 
 	CALL        _I2C1_Rd+0, 0
 	MOVF        R0, 0 
 	MOVWF       _buff+0 
 	MOVLW       0
 	MOVWF       _buff+1 
-;g_ACE_3.c,470 :: 		I2C1_Stop();
+;g_ACE_3.c,500 :: 		I2C1_Stop();
 	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,471 :: 		delay_ms(10000);
-	MOVLW       254
-	MOVWF       R11, 0
-	MOVLW       167
-	MOVWF       R12, 0
-	MOVLW       101
-	MOVWF       R13, 0
-L_main25:
-	DECFSZ      R13, 1, 1
-	BRA         L_main25
-	DECFSZ      R12, 1, 1
-	BRA         L_main25
-	DECFSZ      R11, 1, 1
-	BRA         L_main25
-	NOP
-	NOP
-;g_ACE_3.c,478 :: 		I2C1_Start();
-	CALL        _I2C1_Start+0, 0
-;g_ACE_3.c,479 :: 		I2C1_Wr(ADW);                                   // Address Device + Write
-	MOVLW       208
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,480 :: 		I2C1_Wr(0x40);                                  // Address Pointer
-	MOVLW       64
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,481 :: 		I2C1_Repeated_Start();
-	CALL        _I2C1_Repeated_Start+0, 0
-;g_ACE_3.c,482 :: 		I2C1_Wr(ADR);
-	MOVLW       209
-	MOVWF       FARG_I2C1_Wr_data_+0 
-	CALL        _I2C1_Wr+0, 0
-;g_ACE_3.c,483 :: 		cofe =  I2C1_Rd(0);
-	CLRF        FARG_I2C1_Rd_ack+0 
-	CALL        _I2C1_Rd+0, 0
-	MOVF        R0, 0 
-	MOVWF       _cofe+0 
-	MOVLW       0
-	MOVWF       _cofe+1 
-;g_ACE_3.c,484 :: 		I2C1_Stop();
-	CALL        _I2C1_Stop+0, 0
-;g_ACE_3.c,485 :: 		delay_ms(100);
+;g_ACE_3.c,501 :: 		delay_ms(100);
 	MOVLW       3
 	MOVWF       R11, 0
 	MOVLW       138
 	MOVWF       R12, 0
 	MOVLW       85
 	MOVWF       R13, 0
-L_main26:
+L_main27:
 	DECFSZ      R13, 1, 1
-	BRA         L_main26
+	BRA         L_main27
 	DECFSZ      R12, 1, 1
-	BRA         L_main26
+	BRA         L_main27
 	DECFSZ      R11, 1, 1
-	BRA         L_main26
+	BRA         L_main27
 	NOP
 	NOP
-;g_ACE_3.c,494 :: 		buff=(buff<<8);
+;g_ACE_3.c,503 :: 		inttostr(buff, txt);               // primer byte
 	MOVF        _buff+0, 0 
-	MOVWF       R1 
-	CLRF        R0 
+	MOVWF       FARG_IntToStr_input+0 
+	MOVF        _buff+1, 0 
+	MOVWF       FARG_IntToStr_input+1 
+	MOVLW       _txt+0
+	MOVWF       FARG_IntToStr_output+0 
+	MOVLW       hi_addr(_txt+0)
+	MOVWF       FARG_IntToStr_output+1 
+	CALL        _IntToStr+0, 0
+;g_ACE_3.c,504 :: 		uart1_write_text(txt);
+	MOVLW       _txt+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(_txt+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,505 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr12_g_ACE_3+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(?lstr12_g_ACE_3+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,508 :: 		I2C1_Start();                      // READ R-40
+	CALL        _I2C1_Start+0, 0
+;g_ACE_3.c,509 :: 		I2C1_Wr(ADW);
+	MOVLW       208
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,510 :: 		I2C1_Wr(0x40);
+	MOVLW       64
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,511 :: 		I2C1_Repeated_Start();
+	CALL        _I2C1_Repeated_Start+0, 0
+;g_ACE_3.c,512 :: 		I2C1_Wr(ADR);
+	MOVLW       209
+	MOVWF       FARG_I2C1_Wr_data_+0 
+	CALL        _I2C1_Wr+0, 0
+;g_ACE_3.c,513 :: 		cofe =  I2C1_Rd(0);
+	CLRF        FARG_I2C1_Rd_ack+0 
+	CALL        _I2C1_Rd+0, 0
 	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,495 :: 		buff=buff  | cofe;                              // deux bytes ensambles
+	MOVWF       _cofe+0 
+	MOVLW       0
+	MOVWF       _cofe+1 
+;g_ACE_3.c,514 :: 		I2C1_Stop();
+	CALL        _I2C1_Stop+0, 0
+;g_ACE_3.c,515 :: 		delay_ms(100);
+	MOVLW       3
+	MOVWF       R11, 0
+	MOVLW       138
+	MOVWF       R12, 0
+	MOVLW       85
+	MOVWF       R13, 0
+L_main28:
+	DECFSZ      R13, 1, 1
+	BRA         L_main28
+	DECFSZ      R12, 1, 1
+	BRA         L_main28
+	DECFSZ      R11, 1, 1
+	BRA         L_main28
+	NOP
+	NOP
+;g_ACE_3.c,517 :: 		inttostr(cofe, txt);                // second byte
 	MOVF        _cofe+0, 0 
-	IORWF       R0, 1 
+	MOVWF       FARG_IntToStr_input+0 
 	MOVF        _cofe+1, 0 
-	IORWF       R1, 1 
-	MOVF        R0, 0 
-	MOVWF       _buff+0 
-	MOVF        R1, 0 
-	MOVWF       _buff+1 
-;g_ACE_3.c,504 :: 		finally=buff;
-	CALL        _word2double+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,505 :: 		finally= ((finally * 2)/16386);
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       0
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       128
-	MOVWF       R7 
-	CALL        _Mul_32x32_FP+0, 0
-	MOVLW       0
-	MOVWF       R4 
-	MOVLW       4
-	MOVWF       R5 
-	MOVLW       0
-	MOVWF       R6 
-	MOVLW       141
-	MOVWF       R7 
-	CALL        _Div_32x32_FP+0, 0
-	MOVF        R0, 0 
-	MOVWF       _finally+0 
-	MOVF        R1, 0 
-	MOVWF       _finally+1 
-	MOVF        R2, 0 
-	MOVWF       _finally+2 
-	MOVF        R3, 0 
-	MOVWF       _finally+3 
-;g_ACE_3.c,508 :: 		FloatToStr(finally, txt);
-	MOVF        R0, 0 
-	MOVWF       FARG_FloatToStr_fnum+0 
-	MOVF        R1, 0 
-	MOVWF       FARG_FloatToStr_fnum+1 
-	MOVF        R2, 0 
-	MOVWF       FARG_FloatToStr_fnum+2 
-	MOVF        R3, 0 
-	MOVWF       FARG_FloatToStr_fnum+3 
+	MOVWF       FARG_IntToStr_input+1 
 	MOVLW       _txt+0
-	MOVWF       FARG_FloatToStr_str+0 
+	MOVWF       FARG_IntToStr_output+0 
 	MOVLW       hi_addr(_txt+0)
-	MOVWF       FARG_FloatToStr_str+1 
-	CALL        _FloatToStr+0, 0
-;g_ACE_3.c,509 :: 		uart1_write_text("ACCEL Z: ");
-	MOVLW       ?lstr20_g_ACE_3+0
-	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr20_g_ACE_3+0)
-	MOVWF       FARG_UART1_Write_Text_uart_text+1 
-	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,510 :: 		uart1_write_text(txt);
+	MOVWF       FARG_IntToStr_output+1 
+	CALL        _IntToStr+0, 0
+;g_ACE_3.c,518 :: 		uart1_write_text(txt);
 	MOVLW       _txt+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,511 :: 		uart1_write_text("°C ");
-	MOVLW       ?lstr21_g_ACE_3+0
+;g_ACE_3.c,519 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr13_g_ACE_3+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr21_g_ACE_3+0)
+	MOVLW       hi_addr(?lstr13_g_ACE_3+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,512 :: 		uart1_write_text("\r\n");
-	MOVLW       ?lstr22_g_ACE_3+0
+;g_ACE_3.c,520 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr14_g_ACE_3+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr22_g_ACE_3+0)
+	MOVLW       hi_addr(?lstr14_g_ACE_3+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;g_ACE_3.c,524 :: 		}
-	GOTO        L_main19
-;g_ACE_3.c,525 :: 		}
+;g_ACE_3.c,521 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr15_g_ACE_3+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(?lstr15_g_ACE_3+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,554 :: 		}
+	GOTO        L_main25
+;g_ACE_3.c,555 :: 		}
 L_end_main:
 	GOTO        $+0
 ; end of _main

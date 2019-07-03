@@ -1,16 +1,17 @@
 0	1	mikroCPIC1618.exe -MSF -DBG -pP18F4550 -DL -O11111114 -fo20 -N"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -IP"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\" -IP"C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\libraries\" "g_ACE_3.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CType.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_I2C_b10.mcl" "__Lib_UART_c67.mcl"	 
 hint: 0	1139	Available RAM: 2027 [bytes], Available ROM: 32768 [bytes]	 
-hint: 19	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
 hint: 22	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
-hint: 29	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
+hint: 25	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
+hint: 32	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
+hint: 54	1354	 warning: "/*" within comment	C:\Users\UTEQ\Documents\GitHub\xihmai\firmware\mikroC\g_ACE_3.c
 diagnostics: 0	122	Compilation Started	th02.h
 warning: 39	1503	Result is not defined in function: 'I2C1_TimeoutCallback'	g_ACE_3.c
-diagnostics: 525	123	Compiled Successfully	g_ACE_3.c
+diagnostics: 555	123	Compiled Successfully	g_ACE_3.c
 hint: 16	1164	Variable 'temperature' has been eliminated by optimizer	g_ACE_3.c
-diagnostics: 0	127	All files Compiled in 140 ms	 
-hint: 0	1144	Used RAM (bytes): 180 (9%)  Free RAM (bytes): 1847 (91%)	Used RAM (bytes): 180 (9%)  Free RAM (bytes): 1847 (91%)
-hint: 0	1144	Used ROM (bytes): 5055 (15%)  Free ROM (bytes): 27713 (85%)	Used ROM (bytes): 5055 (15%)  Free ROM (bytes): 27713 (85%)
+diagnostics: 0	127	All files Compiled in 79 ms	 
+hint: 0	1144	Used RAM (bytes): 118 (6%)  Free RAM (bytes): 1909 (94%)	Used RAM (bytes): 118 (6%)  Free RAM (bytes): 1909 (94%)
+hint: 0	1144	Used ROM (bytes): 2537 (8%)  Free ROM (bytes): 30231 (92%)	Used ROM (bytes): 2537 (8%)  Free ROM (bytes): 30231 (92%)
 diagnostics: 0	125	Project Linked Successfully	g_ACE_3.mcppi
-diagnostics: 0	128	Linked in 63 ms	 
-diagnostics: 0	129	Project 'g_ACE_3.mcppi' completed: 219 ms	 
-diagnostics: 0	103	Finished successfully: 01 jul. 2019, 15:58:45	g_ACE_3.mcppi
+diagnostics: 0	128	Linked in 31 ms	 
+diagnostics: 0	129	Project 'g_ACE_3.mcppi' completed: 141 ms	 
+diagnostics: 0	103	Finished successfully: 03 jul. 2019, 11:53:04	g_ACE_3.mcppi

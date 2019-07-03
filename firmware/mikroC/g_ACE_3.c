@@ -61,30 +61,33 @@ void main()
    uart1_write_text("\r\n");
    uart1_write_text("\r\n");
 
-    // DESPERTAR AL ACEL
 
-       I2C1_Start();
-       delay_ms(100);
-       I2C1_Wr(ADW);                // 19 x(4F)
+
+
+       I2C1_Start();                // Configuring MPU6050 and interruption
+       I2C1_Wr(0xD0);                          // 19 x(4F)
        I2C1_Wr(0x19);
        I2C1_Wr(0x07);
        I2C1_Stop();
        delay_ms(100);
 
-       I2C1_Start();
-       I2C1_Wr(ADW);                // 1A   (0b00000111)
-       I2C1_Wr(0x1A);
-       I2C1_Wr(0b00000000);
-       I2C1_Stop();
-       delay_ms(100);
 
-         I2C1_Start();
+       I2C1_Start();
        I2C1_Wr(ADW);                // 6B   yes (RESETS ALL)(new)
        I2C1_Wr(0x6B);
-       I2C1_Wr(0x01);
+       I2C1_Wr(0x00);
        I2C1_Stop();
        delay_ms(100);
+       
 
+       I2C1_Start();
+       I2C1_Wr(ADW);                // 6C il manque les premier deux zeros pour wake-ups
+       I2C1_Wr(0x6C);               // bits 7 y 6
+       I2C1_Wr(0x00);
+       I2C1_Stop();
+       delay_ms(100);
+       
+       
        I2C1_Start();
        I2C1_Wr(ADW);                // 1B    yes (18)
        I2C1_Wr(0x1B);
@@ -98,14 +101,22 @@ void main()
        I2C1_Wr(0x00);
        I2C1_Stop();
        delay_ms(100);
-        /*
+
        I2C1_Start();
-       I2C1_Wr(ADW);                // interrupt data ready
+       delay_ms(100);
+       I2C1_Wr(ADW);                //  38   Activar motion interrupt ( activa el bit (-))
        I2C1_Wr(0x38);
+       I2C1_Wr(0x40);
+       I2C1_Stop();
+       delay_ms(100);
+
+       I2C1_Start();
+       I2C1_Wr(ADW);                // Motion interrupt duration
+       I2C1_Wr(0x20);
        I2C1_Wr(0x01);
        I2C1_Stop();
        delay_ms(100);
-        */
+
        I2C1_Start();
        I2C1_Wr(ADW);                // interrupt data ready (INTERRUPT) STATUS
        I2C1_Wr(0x3A);
@@ -114,17 +125,39 @@ void main()
        delay_ms(100);
 
 
-        /*
        I2C1_Start();
-       I2C1_Wr(ADW);                // 6A
-       I2C1_Wr(0x6A);
-       I2C1_Wr(0b00000101);
+       I2C1_Wr(ADW);                // 1F     Treshold = 100 320mg
+       I2C1_Wr(0x1F);               // 20=32mg
+       I2C1_Wr(0x14);
+       I2C1_Stop();
+       delay_ms(200);                // delay extra
+
+
+       I2C1_Start();
+       I2C1_Wr(ADW);                // 1A   (0b00000111)  MOtion HPF HOLD
+       I2C1_Wr(0x1A);
+       I2C1_Wr(0x07);
        I2C1_Stop();
        delay_ms(100);
-
-
-
-
+       
+       
+       I2C1_Start();
+       I2C1_Wr(ADW);                // 6C (2) il manque les premier deux zeros pour wake-ups
+       I2C1_Wr(0x6C);               // bits 7 y 6
+       I2C1_Wr(0x60);
+       I2C1_Stop();
+       delay_ms(100);
+       
+       
+       I2C1_Start();
+       I2C1_Wr(ADW);                // 6B   activate cycle
+       I2C1_Wr(0x6B);
+       I2C1_Wr(0x10);
+       I2C1_Stop();
+       delay_ms(100);
+       
+       
+        /* este no
        I2C1_Start();
        I2C1_Wr(ADW);                // 74
        I2C1_Wr(0x74);
@@ -134,17 +167,14 @@ void main()
        delay_ms(100);
         */
 
-        delay_ms(100);
+        delay_ms(200);
+        
+
 
  while(1)
   {
-      uart1_write_text("GO ON");
-       uart1_write_text("\r\n");
+
        
-
-
-
-        
       /*temperture*/
         /*
        uart1_write_text("REAL TEMP :                 ");
@@ -354,7 +384,7 @@ void main()
          */
         //(Accelerometer)
        //lectura axis X----------------------------------------------------------
-
+         /*
        I2C1_Start();
        I2C1_Wr(ADW);                                   // Address Device + Write
        I2C1_Wr(0x3B);                                  // Address Pointer
@@ -363,11 +393,11 @@ void main()
        buff = I2C1_Rd(0);
        I2C1_Stop();
        delay_ms(100);
-        /*
+
        inttostr(buff, txt);                            // primer byte
        uart1_write_text(txt);
        uart1_write_text("\r\n");
-         */
+
 
        I2C1_Start();
        I2C1_Wr(ADW);                                   // Address Device + Write
@@ -377,26 +407,26 @@ void main()
        cofe =  I2C1_Rd(0);
        I2C1_Stop();
        delay_ms(100);
-        /*
+
        inttostr(cofe, txt);
        uart1_write_text(txt);                           // second byte
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
-         */
+
 
        buff=(buff<<8);
        buff=buff  | cofe;                              // deux bytes ensambles
-       /*
+
        inttostr(buff, txt);
        uart1_write_text(txt);
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
-        */
+
 
        finally=buff;
-       finally= ((finally * 2)/16386);
+       //finally= ((finally * 2)/16386);
 
 
        FloatToStr(finally, txt);
@@ -405,9 +435,9 @@ void main()
        uart1_write_text("°C ");
        uart1_write_text("\r\n");
        //delay_ms(5000);
-
+           */
        //lectura axis Y**********************************************************
-
+          /*
        I2C1_Start();
        I2C1_Wr(ADW);                                   // Address Device + Write
        I2C1_Wr(0x3D);                                  // Address Pointer
@@ -416,11 +446,11 @@ void main()
        buff = I2C1_Rd(0);
        I2C1_Stop();
        delay_ms(100);
-        /*
+
        inttostr(buff, txt);                            // primer byte
        uart1_write_text(txt);
        uart1_write_text("\r\n");
-        */
+
 
        I2C1_Start();
        I2C1_Wr(ADW);                                   // Address Device + Write
@@ -430,26 +460,26 @@ void main()
        cofe =  I2C1_Rd(0);
        I2C1_Stop();
        delay_ms(100);
-        /*
+
        inttostr(cofe, txt);
        uart1_write_text(txt);                           // second byte
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
-        */
+
 
        buff=(buff<<8);
        buff=buff  | cofe;                              // deux bytes ensambles
-       /*
+
        inttostr(buff, txt);
        uart1_write_text(txt);
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
-       */
+
 
        finally=buff;
-       finally= ((finally * 2)/16386);
+       //finally= ((finally * 2)/16386);
 
 
        FloatToStr(finally, txt);
@@ -458,51 +488,51 @@ void main()
        uart1_write_text("°C ");
        uart1_write_text("\r\n");
 
-
+       */
        //lectura axis Z**********************************************************
 
-      I2C1_Start();
-       I2C1_Wr(ADW);                                   // Address Device + Write
-       I2C1_Wr(0x3F);                                  // Address Pointer
+       I2C1_Start();                       // READ R-3F
+       I2C1_Wr(ADW);
+       I2C1_Wr(0x3F);
        I2C1_Repeated_Start();
        I2C1_Wr(ADR);
        buff = I2C1_Rd(0);
        I2C1_Stop();
-       delay_ms(10000);
-        /*
-       inttostr(buff, txt);                            // primer byte
+       delay_ms(100);
+
+       inttostr(buff, txt);               // primer byte
        uart1_write_text(txt);
        uart1_write_text("\r\n");
-         */
 
-       I2C1_Start();
-       I2C1_Wr(ADW);                                   // Address Device + Write
-       I2C1_Wr(0x40);                                  // Address Pointer
+
+       I2C1_Start();                      // READ R-40
+       I2C1_Wr(ADW);
+       I2C1_Wr(0x40);
        I2C1_Repeated_Start();
        I2C1_Wr(ADR);
        cofe =  I2C1_Rd(0);
        I2C1_Stop();
        delay_ms(100);
-        /*
-       inttostr(cofe, txt);
-       uart1_write_text(txt);                           // second byte
-       uart1_write_text("\r\n");
-       uart1_write_text("\r\n");
-       uart1_write_text("\r\n");
-        */
 
-       buff=(buff<<8);
-       buff=buff  | cofe;                              // deux bytes ensambles
-       /*
-       inttostr(buff, txt);
+       inttostr(cofe, txt);                // second byte
        uart1_write_text(txt);
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
-       */
+
+      /*
+       buff=(buff<<8);
+       buff=buff  | cofe;                 // deux bytes ensambles
+
+       inttostr(buff, txt);               // Write ensambles
+       uart1_write_text(txt);
+       uart1_write_text("\r\n");
+       uart1_write_text("\r\n");
+       uart1_write_text("\r\n");
+
 
        finally=buff;
-       finally= ((finally * 2)/16386);
+       //finally= ((finally * 2)/16386);
 
 
        FloatToStr(finally, txt);
