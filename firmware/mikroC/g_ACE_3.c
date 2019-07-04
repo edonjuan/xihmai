@@ -124,19 +124,19 @@ void main()
        I2C1_Stop();
        delay_ms(100);
 
-
+       /*
        I2C1_Start();
        I2C1_Wr(ADW);                // 1F     Treshold = 100 320mg
-       I2C1_Wr(0x1F);               // 20=32mg
-       I2C1_Wr(0x14);
+       I2C1_Wr(0x1F);               // 20=32mg=0x14
+       I2C1_Wr(0x01);
        I2C1_Stop();
        delay_ms(200);                // delay extra
-
+        */
 
        I2C1_Start();
-       I2C1_Wr(ADW);                // 1A   (0b00000111)  MOtion HPF HOLD
+       I2C1_Wr(ADW);                // 1A   (0b00000111)  MOtion HPF HOLD    (07)
        I2C1_Wr(0x1A);
-       I2C1_Wr(0x07);
+       I2C1_Wr(0x00);
        I2C1_Stop();
        delay_ms(100);
        
@@ -437,7 +437,9 @@ void main()
        //delay_ms(5000);
            */
        //lectura axis Y**********************************************************
-          /*
+       uart1_write_text("go away");
+        uart1_write_text("\r\n");
+        
        I2C1_Start();
        I2C1_Wr(ADW);                                   // Address Device + Write
        I2C1_Wr(0x3D);                                  // Address Pointer
@@ -471,6 +473,13 @@ void main()
        buff=(buff<<8);
        buff=buff  | cofe;                              // deux bytes ensambles
 
+       buff=~buff;
+       buff=(buff | (0x01));
+         
+         if(buff>=32768)
+          buff= buff & (0xFFFF);
+
+
        inttostr(buff, txt);
        uart1_write_text(txt);
        uart1_write_text("\r\n");
@@ -479,7 +488,7 @@ void main()
 
 
        finally=buff;
-       //finally= ((finally * 2)/16386);
+       finally= ((finally * 2)/16386);
 
 
        FloatToStr(finally, txt);
@@ -487,10 +496,12 @@ void main()
        uart1_write_text(txt);
        uart1_write_text("°C ");
        uart1_write_text("\r\n");
-
-       */
+       delay_ms(1000);
+       /*
        //lectura axis Z**********************************************************
 
+   
+   
        I2C1_Start();                       // READ R-3F
        I2C1_Wr(ADW);
        I2C1_Wr(0x3F);
@@ -503,8 +514,7 @@ void main()
        inttostr(buff, txt);               // primer byte
        uart1_write_text(txt);
        uart1_write_text("\r\n");
-
-
+       
        I2C1_Start();                      // READ R-40
        I2C1_Wr(ADW);
        I2C1_Wr(0x40);
@@ -519,8 +529,8 @@ void main()
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
+       delay_ms(1000);
 
-      /*
        buff=(buff<<8);
        buff=buff  | cofe;                 // deux bytes ensambles
 
@@ -532,17 +542,20 @@ void main()
 
 
        finally=buff;
-       //finally= ((finally * 2)/16386);
-
+       finally= ((finally * 2)/16386);
 
        FloatToStr(finally, txt);
        uart1_write_text("ACCEL Z: ");
        uart1_write_text(txt);
        uart1_write_text("°C ");
        uart1_write_text("\r\n");
+       */
 
 
-        /*(RESETS signal paths)
+
+      }
+} 
+/*(RESETS signal paths)
        I2C1_Start();
        I2C1_Wr(ADW);                // 6B   yes (RESETS ALL)
        I2C1_Wr(0x68);
@@ -550,6 +563,3 @@ void main()
        I2C1_Stop();
        delay_ms(100);
           */
-
-      }
-}
