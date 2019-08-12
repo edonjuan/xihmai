@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=T_RTC_1.c
+Value=Metodos_DS1307.h
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -25,9 +25,8 @@ Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
 File0=T_RTC_1.c
-File1=.\libraries\th02.h
-File2=Metodos_DS1307.h
-Count=3
+File1=Metodos_DS1307.h
+Count=2
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -57,5 +56,4 @@ Count=3
 [LIB_EXPANDED_NODES]
 0=mikroE Libraries
 1=System Libraries
-45=Conversions
-Count=4
+Count=2
