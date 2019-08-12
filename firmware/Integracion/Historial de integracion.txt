@@ -1,0 +1,19 @@
+Primera Integracion M_TH02_1
+
+A Mcro PIC18F25k22
+
+a. TH02
+b. MPU6050
+c. LED RGB
+d. Modulo SD
+e. EEPROM
+f. Sleep mode 
+
+Pendiente 
+- Sensor de Humedad
+- Sensor de Presion 
+- Sensor de Temperatura
+
+
+
+  
