@@ -1,0 +1,14 @@
+main
+	__CC2DW
+	UART1_Init
+	I2C1_Init
+	th02Init
+		I2C1_Init
+	UART1_Write_Text
+		UART1_Write
+	I2C1_Start
+		I2C1_Is_Idle
+		____DoIFC
+	I2C1_Wr
+		____DoIFC
+	I2C1_Stop

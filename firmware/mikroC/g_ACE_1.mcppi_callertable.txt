@@ -2,6 +2,7 @@ main
 	__CC2DW
 	UART1_Init
 	g_ACE_1
+		I2C_Set_Active
 		I2C1_Init
 	UART1_Write_Text
 		UART1_Write
@@ -49,6 +50,19 @@ main
 		I2C1_Wr
 			____DoIFC
 		I2C1_Stop
+		Delay_100ms
+		I2C1_Repeated_Start
+			____DoIFC
+		I2C1_Rd
+			____DoIFC
+		UART1_Write_Text
+			UART1_Write
+		byte2double
+			NRM4032
+				SETFUN32
+				FIXSIGN32
+				SETFOV32
+				RES032
 	double2word
 		SETIOV3224
 	word2double

@@ -76,7 +76,7 @@ float getHumidity(void)
 
  return humidity;
 }
-#line 4 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_1.c"
+#line 6 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_1.c"
  char txt[20];
 
  float accel, cool,ok;
@@ -85,6 +85,8 @@ float getHumidity(void)
 
 void g_ACE_1(void)
 {
+ I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start, &I2C1_Wr, &I2C1_Wr, &I2C1_Stop, &I2C1_Is_Idle);
+
 
  I2C1_Init(100000);
  delay_ms(100);
@@ -92,28 +94,56 @@ void g_ACE_1(void)
  ADCON1=0x0F;
  INTCON2.RBPU=0;
  PORTB=0;
+
+
+
 }
 
 
 float getaccel(void)
 {
+ unsigned short take;
+
 
 
  float acel;
 
  I2C1_Start();
  I2C1_Wr(0x68);
-
-
- I2C1_Wr(0x33);
-
- I2C1_Wr(0x00);
-
-
+ I2C1_Wr(0x6B);
+ I2C1_Wr(0b00000000);
+ I2C1_Wr(0x1C);
+ I2C1_Wr(0b00011000);
+ I2C1_Wr(0x75);
+ I2C1_Wr(0x68);
  I2C1_Stop();
 
 
- return 1.25;
+
+
+ I2C1_Start();
+ I2C1_Wr(0x68);
+ I2C1_Wr(0x32);
+
+ I2C1_Stop();
+ Delay_100ms();
+
+
+ I2C1_repeated_Start();
+ I2C1_Wr(0x69);
+
+
+
+
+
+ take = I2C1_Rd(0);
+ uart1_write_text("It still goes");
+ uart1_write_text("\r\n");
+
+ acel=take;
+
+ I2C1_Stop();
+ return acel;
 
 }
 
@@ -129,7 +159,8 @@ void main()
 
 
  while(1){
-
+ uart1_write_text("temperture:");
+ uart1_write_text("\r\n");
  ok = getTemperature();
  floattostr(ok,txt);
  uart1_write_text(txt);
@@ -147,14 +178,19 @@ void main()
  uart1_write_text("convertion");
  uart1_write_text("\r\n");
 
+
+
  floattostr(buff,tyt);
  uart1_write_text(tyt);
  uart1_write_text("\r\n");
  delay_ms(1000);
 
 
+ uart1_write_text("");
+ uart1_write_text("\r\n");
+
  }
- uart1_write_text("termina");
+
 
 
 
