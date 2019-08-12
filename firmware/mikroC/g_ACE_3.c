@@ -54,7 +54,7 @@ void main()
 
 
    uart1_init(9600);
-   I2C1_Init(100000);         // initialize I2C communication
+   I2C1_Init(100000);                   // initialize I2C communication
    TH02Init();
 
    uart1_write_text("STARTING");
@@ -71,7 +71,7 @@ void main()
        I2C1_Stop();
        delay_ms(100);
 
-
+                                            // être sure du Reset de touts les registers
        I2C1_Start();
        I2C1_Wr(ADW);                // 6B   yes (RESETS ALL)(new)
        I2C1_Wr(0x6B);
@@ -124,19 +124,19 @@ void main()
        I2C1_Stop();
        delay_ms(100);
 
-       /*
+
        I2C1_Start();
        I2C1_Wr(ADW);                // 1F     Treshold = 100 320mg
        I2C1_Wr(0x1F);               // 20=32mg=0x14
        I2C1_Wr(0x01);
        I2C1_Stop();
        delay_ms(200);                // delay extra
-        */
+
 
        I2C1_Start();
        I2C1_Wr(ADW);                // 1A   (0b00000111)  MOtion HPF HOLD    (07)
        I2C1_Wr(0x1A);
-       I2C1_Wr(0x00);
+       I2C1_Wr(0xFF);
        I2C1_Stop();
        delay_ms(100);
        
@@ -156,18 +156,8 @@ void main()
        I2C1_Stop();
        delay_ms(100);
        
-       
-        /* este no
-       I2C1_Start();
-       I2C1_Wr(ADW);                // 74
-       I2C1_Wr(0x74);
-       I2C1_Wr(0x00);
-       cool = I2C1_Rd(0);
-       I2C1_Stop();
-       delay_ms(100);
-        */
 
-        delay_ms(200);
+       delay_ms(200);
         
 
 
@@ -435,7 +425,7 @@ void main()
        uart1_write_text("°C ");
        uart1_write_text("\r\n");
        //delay_ms(5000);
-           */
+
        //lectura axis Y**********************************************************
        uart1_write_text("go away");
         uart1_write_text("\r\n");

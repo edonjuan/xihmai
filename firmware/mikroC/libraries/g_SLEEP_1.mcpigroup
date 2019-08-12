@@ -1,0 +1,6 @@
+[PROJECTS]
+Count=2
+Project0=..\g_ACE_3.mcppi
+Project1=g_SLEEP_1.mcppi
+[ActiveProject]
+Index=1

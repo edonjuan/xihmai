@@ -198,11 +198,20 @@ void main()
  I2C1_Wr(0x01);
  I2C1_Stop();
  delay_ms(100);
-#line 136 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+
+ I2C1_Start();
+ I2C1_Wr( 0xD0 );
+ I2C1_Wr(0x1F);
+ I2C1_Wr(0x01);
+ I2C1_Stop();
+ delay_ms(200);
+
+
  I2C1_Start();
  I2C1_Wr( 0xD0 );
  I2C1_Wr(0x1A);
- I2C1_Wr(0x00);
+ I2C1_Wr(0xFF);
  I2C1_Stop();
  delay_ms(100);
 
@@ -221,74 +230,14 @@ void main()
  I2C1_Wr(0x10);
  I2C1_Stop();
  delay_ms(100);
-#line 170 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+
  delay_ms(200);
 
 
 
  while(1)
  {
-#line 440 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
- uart1_write_text("go away");
- uart1_write_text("\r\n");
-
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3D);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- buff = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-
- inttostr(buff, txt);
- uart1_write_text(txt);
- uart1_write_text("\r\n");
-
-
- I2C1_Start();
- I2C1_Wr( 0xD0 );
- I2C1_Wr(0x3E);
- I2C1_Repeated_Start();
- I2C1_Wr( 0xD1 );
- cofe = I2C1_Rd(0);
- I2C1_Stop();
- delay_ms(100);
-
- inttostr(cofe, txt);
- uart1_write_text(txt);
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
-
-
- buff=(buff<<8);
- buff=buff | cofe;
-
- buff=~buff;
- buff=(buff | (0x01));
-
- if(buff>=32768)
- buff= buff & (0xFFFF);
-
-
- inttostr(buff, txt);
- uart1_write_text(txt);
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
-
-
- finally=buff;
- finally= ((finally * 2)/16386);
-
-
- FloatToStr(finally, txt);
- uart1_write_text("ACCEL Y: ");
- uart1_write_text(txt);
- uart1_write_text("°C ");
- uart1_write_text("\r\n");
- delay_ms(1000);
-#line 556 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+#line 546 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  }
 }
