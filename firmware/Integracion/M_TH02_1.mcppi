@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Sleep_mode_4.c
+Value=libraries\th02.h
 [USE_EEPROM]
 Value=0
 [USE_HEAP]
@@ -16,7 +16,7 @@ Value=0
 [EEPROM_DEFINITION]
 Value=
 [FILES]
-File0=..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Sleep_mode_4.c
+File0=M_TH02_1.c
 Count=1
 [BINARIES]
 Count=0
@@ -24,8 +24,9 @@ Count=0
 Count=0
 ActiveImageIndex=-1
 [OPENED_FILES]
-File0=..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Sleep_mode_4.c
-Count=1
+File0=M_TH02_1.c
+File1=.\libraries\th02.h
+Count=2
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
@@ -33,21 +34,26 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Path0=..\..\..\..\..\..\Public\Documents\Mikroelektronika\mikroC PRO for PIC\
-Count=1
-[HEADER_PATH]
 Count=0
+[HEADER_PATH]
+Path0=.\libraries\
+Count=1
 [HEADERS]
 Count=0
 [PLDS]
 Count=0
 [Useses]
-Count=0
+File0=I2C
+File1=UART
+File2=Conversions
+File3=C_String
+Count=4
 [EXPANDED_NODES]
-Count=0
+0=M_TH02_1.mcppi
+Count=1
 [LIB_EXPANDED_NODES]
 0=mikroE Libraries
 1=System Libraries
-872=mikroSDK Libraries
-876=Additional Libraries
+850=UART
+1904=Third Party Libraries
 Count=5
