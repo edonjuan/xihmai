@@ -2,6 +2,8 @@ main
 	__CC2DW
 	config
 		UART1_Init
+		UART1_Write_Text
+			UART1_Write
 		th02Init
 			I2C1_Init
 		Accelconfig
@@ -82,3 +84,18 @@ main
 	IntToStr
 		WordToStr
 			Div_16X16_U
+	Leer
+		I2C1_Start
+			I2C1_Is_Idle
+			____DoIFC
+		I2C1_Wr
+			____DoIFC
+		I2C1_Repeated_Start
+			____DoIFC
+		I2C1_Rd
+			____DoIFC
+		I2C1_Stop
+	Bcd2Dec
+	Div_16x16_S
+		Div_16x16_S_L
+	UART1_Write

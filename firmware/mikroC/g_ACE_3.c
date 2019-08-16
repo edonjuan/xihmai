@@ -165,8 +165,7 @@ void main()
   {
 
        
-      /*temperture*/
-        /*
+
        uart1_write_text("REAL TEMP :                 ");
        ok = getTemperature();
        floattostr(ok,txt);
@@ -174,7 +173,7 @@ void main()
        uart1_write_text("\r\n");
        uart1_write_text("\r\n");
        delay_ms(100);
-         */
+
          
 
       

@@ -70,7 +70,7 @@ float getHumidity(void)
       humidity = 384;
    else
       humidity = buffer;
-   //humidity = (humidity/16)-24;
+   humidity = (humidity/16)-24;
 
    return humidity;
 }

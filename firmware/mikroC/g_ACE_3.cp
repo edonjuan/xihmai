@@ -238,6 +238,16 @@ void main()
 
  while(1)
  {
-#line 546 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
+
+
+
+ uart1_write_text("REAL TEMP :                 ");
+ ok = getTemperature();
+ floattostr(ok,txt);
+ uart1_write_text(txt);
+ uart1_write_text("\r\n");
+ uart1_write_text("\r\n");
+ delay_ms(100);
+#line 545 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/mikroC/g_ACE_3.c"
  }
 }

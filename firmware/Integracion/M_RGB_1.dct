@@ -90,6 +90,7 @@ adresl
 ahen
 ahen_bit
 ahen_ssp1con3_bit
+alarmas
 an0
 an0_bit
 an1
@@ -712,6 +713,7 @@ eeip_bit
 eepgd
 eepgd_bit
 equals_double
+escribir
 f
 fast
 ferr
@@ -791,6 +793,7 @@ hlvdl2_bit
 hlvdl3
 hlvdl3_bit
 humidity
+i
 i2c_is_idle
 i2c_is_idle_ptr
 i2c_read
@@ -987,6 +990,7 @@ latc6
 latc6_bit
 latc7
 latc7_bit
+leer
 lfiofs
 lfiofs_bit
 longint2double
@@ -1607,6 +1611,7 @@ sendb1
 sendb1_bit
 sendb2
 sendb2_bit
+set_fecha_hora
 setfdz32
 setfov32
 setfun32
@@ -2018,6 +2023,7 @@ temperature
 tgen
 tgen_bit
 th02init
+time
 tmr0h
 tmr0ie
 tmr0ie_bit

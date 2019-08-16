@@ -231,10 +231,10 @@ L_getHumidity2:
 	MOVF        R2, 0 
 	SUBLW       7
 	BTFSS       STATUS+0, 2 
-	GOTO        L__getHumidity30
+	GOTO        L__getHumidity31
 	MOVF        R1, 0 
 	SUBLW       192
-L__getHumidity30:
+L__getHumidity31:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_getHumidity3
 ;th02.h,68 :: 		humidity = 1984;
@@ -252,10 +252,10 @@ L_getHumidity3:
 	MOVLW       1
 	SUBWF       getHumidity_buffer_L0+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__getHumidity31
+	GOTO        L__getHumidity32
 	MOVLW       128
 	SUBWF       getHumidity_buffer_L0+0, 0 
-L__getHumidity31:
+L__getHumidity32:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_getHumidity5
 ;th02.h,70 :: 		humidity = 384;
@@ -832,9 +832,73 @@ L_main24:
 	NOP
 ;g_ACE_3.c,164 :: 		while(1)
 L_main25:
-;g_ACE_3.c,546 :: 		}
+;g_ACE_3.c,169 :: 		uart1_write_text("REAL TEMP :                 ");
+	MOVLW       ?lstr12_g_ACE_3+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(?lstr12_g_ACE_3+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,170 :: 		ok = getTemperature();
+	CALL        _getTemperature+0, 0
+	MOVF        R0, 0 
+	MOVWF       _ok+0 
+	MOVF        R1, 0 
+	MOVWF       _ok+1 
+	MOVF        R2, 0 
+	MOVWF       _ok+2 
+	MOVF        R3, 0 
+	MOVWF       _ok+3 
+;g_ACE_3.c,171 :: 		floattostr(ok,txt);
+	MOVF        R0, 0 
+	MOVWF       FARG_FloatToStr_fnum+0 
+	MOVF        R1, 0 
+	MOVWF       FARG_FloatToStr_fnum+1 
+	MOVF        R2, 0 
+	MOVWF       FARG_FloatToStr_fnum+2 
+	MOVF        R3, 0 
+	MOVWF       FARG_FloatToStr_fnum+3 
+	MOVLW       _txt+0
+	MOVWF       FARG_FloatToStr_str+0 
+	MOVLW       hi_addr(_txt+0)
+	MOVWF       FARG_FloatToStr_str+1 
+	CALL        _FloatToStr+0, 0
+;g_ACE_3.c,172 :: 		uart1_write_text(txt);
+	MOVLW       _txt+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(_txt+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,173 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr13_g_ACE_3+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(?lstr13_g_ACE_3+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,174 :: 		uart1_write_text("\r\n");
+	MOVLW       ?lstr14_g_ACE_3+0
+	MOVWF       FARG_UART1_Write_Text_uart_text+0 
+	MOVLW       hi_addr(?lstr14_g_ACE_3+0)
+	MOVWF       FARG_UART1_Write_Text_uart_text+1 
+	CALL        _UART1_Write_Text+0, 0
+;g_ACE_3.c,175 :: 		delay_ms(100);
+	MOVLW       3
+	MOVWF       R11, 0
+	MOVLW       138
+	MOVWF       R12, 0
+	MOVLW       85
+	MOVWF       R13, 0
+L_main27:
+	DECFSZ      R13, 1, 1
+	BRA         L_main27
+	DECFSZ      R12, 1, 1
+	BRA         L_main27
+	DECFSZ      R11, 1, 1
+	BRA         L_main27
+	NOP
+	NOP
+;g_ACE_3.c,545 :: 		}
 	GOTO        L_main25
-;g_ACE_3.c,547 :: 		}
+;g_ACE_3.c,546 :: 		}
 L_end_main:
 	GOTO        $+0
 ; end of _main
