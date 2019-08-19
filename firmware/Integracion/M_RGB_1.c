@@ -9,6 +9,8 @@
 #define BLUE  (LATB.F5)
 
 #define ADDRESS_RTC (0xD0)
+#define RATE (5)
+
 
 /* Global variables */
 float temperature = 0;
@@ -39,48 +41,53 @@ void interrupt()
           
           // RATE = 1 sec
           sec++;
-          if(sec>=10)
+          if(sec>=60)
           {
               sec=0;
+              min++;
               
-               temperature = getTemperature();
-               floattostr(temperature, txt);
-               UART1_Write_Text("TEMPERATURE: ");
-               UART1_Write_Text(txt);
-               uart1_write_text("°C\r\n");
+              if((min%RATE)==0)
+              {
+                   temperature = getTemperature();
+                   floattostr(temperature, txt);
+                   UART1_Write_Text("TEMPERATURE: ");
+                   UART1_Write_Text(txt);
+                   uart1_write_text("°C\r\n");
 
-               //delay_ms(500);
+                   humidity = getHumidity();
+                   floattostr(humidity, txt);
+                   UART1_Write_Text("HUMEDAD: ");
+                   UART1_Write_Text(txt);
+                   uart1_write_text("%\r\n");
 
-               humidity = getHumidity();
-               floattostr(humidity, txt);
-               UART1_Write_Text("HUMEDAD: ");
-               UART1_Write_Text(txt);
-               uart1_write_text("%\r\n");
+                   UART1_Write_Text("Drops: ");
+                   drops = TMR0L;
+                   drops |=  (TMR0H << 8);
+                   inttostr(drops, txt);
+                   UART1_Write_Text(txt);
+                   uart1_write_text("\r\n");
+                   TMR0L = 0;
+                   TMR0H = 0;
 
-               //delay_ms(500);
+                   // DATE
+                   UART1_Write_Text("Time: ");
+                   for(i=6; i>0; i--)
+                   {
+                      time = Leer(ADDRESS_RTC,i);
 
-               UART1_Write_Text("Drops: ");
-               drops = TMR0L;
-               drops |=  (TMR0H << 8);
-               inttostr(drops, txt);
-               UART1_Write_Text(txt);
-               uart1_write_text("\r\n");
-               TMR0L = 0;
-               TMR0H = 0;
+                      time = Bcd2Dec(time);
+                      UART1_Write( (time/10) + 48 );
+                      UART1_Write( (time%10) + 48 );
+                      UART1_Write( ':' );
+                   }
+                   
+                   min = time;
+                   uart1_write_text("\r\n");
+                   uart1_write_text("\r\n");
+              }
+              
+              
 
-               // MANDAR FECHA Y HORA
-               UART1_Write_Text("Time: ");
-               for(i=6; i>0; i--)
-               {
-                  time = Leer(ADDRESS_RTC,i);
-
-                  time = Bcd2Dec(time);
-                  UART1_Write( (time/10) + 48 );
-                  UART1_Write( (time%10) + 48 );
-                  UART1_Write( ':' );
-               }
-               uart1_write_text("\r\n");
-               uart1_write_text("\r\n");
           }
           RED = ~ RED;              // Clear flag
           INTCON.F1 = 0;

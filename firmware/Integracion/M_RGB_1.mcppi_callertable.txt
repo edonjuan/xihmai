@@ -15,6 +15,7 @@ interrupt
 			I2C1_Wr
 				____DoIFC
 			I2C1_Stop
+	Div_16X16_U
 	getTemperature
 		I2C1_Start
 			I2C1_Is_Idle

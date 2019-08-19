@@ -200,15 +200,10 @@ int Leer(unsigned char direccion_esclavo,
  I2C1_Repeated_Start();
  I2C1_Wr(direccion_esclavo+1);
 
-
-
  LATB.F5 = 1;
  valor=I2C1_Rd(0);
  LATB.F5 = 0;
  I2C1_Stop();
-
-
-
  return valor;
 }
 
@@ -265,7 +260,7 @@ void Alarmas(int A1seg, int A1min, int A1hora, int A1dia,
  UART1_Write_Text("finish");
  UART1_Write_Text("\r\n   \r\n");
 }
-#line 14 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/Integracion/M_RGB_1.c"
+#line 16 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/Integracion/M_RGB_1.c"
 float temperature = 0;
 float humidity = 0;
 unsigned int drops = 0;
@@ -294,25 +289,24 @@ void interrupt()
 
 
  sec++;
- if(sec>=10)
+ if(sec>=60)
  {
  sec=0;
+ min++;
 
+ if((min% (5) )==0)
+ {
  temperature = getTemperature();
  floattostr(temperature, txt);
  UART1_Write_Text("TEMPERATURE: ");
  UART1_Write_Text(txt);
  uart1_write_text("°C\r\n");
 
-
-
  humidity = getHumidity();
  floattostr(humidity, txt);
  UART1_Write_Text("HUMEDAD: ");
  UART1_Write_Text(txt);
  uart1_write_text("%\r\n");
-
-
 
  UART1_Write_Text("Drops: ");
  drops = TMR0L;
@@ -334,8 +328,14 @@ void interrupt()
  UART1_Write( (time%10) + 48 );
  UART1_Write( ':' );
  }
+
+ min = time;
  uart1_write_text("\r\n");
  uart1_write_text("\r\n");
+ }
+
+
+
  }
   (LATB.F7)  = ~  (LATB.F7) ;
  INTCON.F1 = 0;
