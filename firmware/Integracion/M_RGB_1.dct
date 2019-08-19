@@ -645,6 +645,7 @@ double2longint
 double2longword
 double2word
 drops
+drops_b
 dt1
 dt1_bit
 dt2
@@ -792,6 +793,7 @@ hlvdl2
 hlvdl2_bit
 hlvdl3
 hlvdl3_bit
+home
 humidity
 i
 i2c_is_idle
@@ -882,6 +884,7 @@ intedg1
 intedg1_bit
 intedg2
 intedg2_bit
+interrupt
 intsrc
 intsrc_bit
 inttohex
@@ -1048,6 +1051,8 @@ mfiofs
 mfiofs_bit
 mfiosel
 mfiosel_bit
+min
+modules
 msk0
 msk0_bit
 msk0_ssp1msk_bit
@@ -1601,6 +1606,7 @@ sdo1
 sdo1_bit
 sdo2
 sdo2_bit
+sec
 sen
 sen_bit
 sen_ssp1con2_bit

@@ -20,14 +20,14 @@ int Leer(unsigned char direccion_esclavo,
                     I2C1_Repeated_Start();
                     I2C1_Wr(direccion_esclavo+1);
                     
-                    /*00000000000000000000000*/
-                    delay_ms(200);
-                          LATB.F5 = 1;
+
+                    //delay_ms(200);
+                          LATB.F5 = 1;   //BLUE
                     valor=I2C1_Rd(0);
                            LATB.F5 = 0;
                     I2C1_Stop();
                     
-                    delay_ms(200);
+                    //delay_ms(200);
 
                     return valor;
 }

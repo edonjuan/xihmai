@@ -1,6 +1,8 @@
 main
 	__CC2DW
 	config
+interrupt
+	modules
 		UART1_Init
 		UART1_Write_Text
 			UART1_Write

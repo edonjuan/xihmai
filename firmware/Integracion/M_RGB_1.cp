@@ -7,10 +7,6 @@ void th02Init(void)
 {
  I2C1_Init(100000);
  delay_ms(100);
-
- ADCON1=0x0F;
- INTCON2.RBPU=0;
- PORTB=0;
 }
 
 float getTemperature(void)
@@ -205,13 +201,13 @@ int Leer(unsigned char direccion_esclavo,
  I2C1_Wr(direccion_esclavo+1);
 
 
- delay_ms(200);
+
  LATB.F5 = 1;
  valor=I2C1_Rd(0);
  LATB.F5 = 0;
  I2C1_Stop();
 
- delay_ms(200);
+
 
  return valor;
 }
@@ -269,27 +265,38 @@ void Alarmas(int A1seg, int A1min, int A1hora, int A1dia,
  UART1_Write_Text("finish");
  UART1_Write_Text("\r\n   \r\n");
 }
-#line 16 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/Integracion/M_RGB_1.c"
-float temperature, humidity;
-
-unsigned int drops;
-unsigned char i;
+#line 14 "C:/Users/UTEQ/Documents/GitHub/xihmai/firmware/Integracion/M_RGB_1.c"
+float temperature = 0;
+float humidity = 0;
+unsigned int drops = 0;
+unsigned int drops_b = 0;
+unsigned char i = 0;
+unsigned short home = 0;
 char txt[20];
-
-int time;
+int time = 0;
+unsigned int sec=0;
+unsigned int min=0;
 
 
 void config (void);
+void modules (void);
 
-
-void main()
+void interrupt()
 {
- config();
-
-
- while(1)
+ if(INTCON.F1)
  {
 
+ if(home)
+ {
+ modules();
+ home = 0;
+ }
+
+
+ sec++;
+ if(sec>=10)
+ {
+ sec=0;
 
  temperature = getTemperature();
  floattostr(temperature, txt);
@@ -297,8 +304,6 @@ void main()
  UART1_Write_Text(txt);
  uart1_write_text("°C\r\n");
 
-
- delay_ms(500);
 
 
  humidity = getHumidity();
@@ -309,24 +314,18 @@ void main()
 
 
 
- delay_ms(500);
-
-
  UART1_Write_Text("Drops: ");
  drops = TMR0L;
  drops |= (TMR0H << 8);
  inttostr(drops, txt);
  UART1_Write_Text(txt);
  uart1_write_text("\r\n");
-
-
-
- delay_ms(500);
-
+ TMR0L = 0;
+ TMR0H = 0;
 
 
  UART1_Write_Text("Time: ");
- for(i=1; i<=6; i++)
+ for(i=6; i>0; i--)
  {
  time = Leer( (0xD0) ,i);
 
@@ -335,9 +334,32 @@ void main()
  UART1_Write( (time%10) + 48 );
  UART1_Write( ':' );
  }
+ uart1_write_text("\r\n");
+ uart1_write_text("\r\n");
+ }
+  (LATB.F7)  = ~  (LATB.F7) ;
+ INTCON.F1 = 0;
+ }
+}
 
- uart1_write_text("\r\n");
- uart1_write_text("\r\n");
+
+void main()
+{
+ config();
+
+
+ while(1)
+ {
+ drops = TMR0L;
+ drops |= (TMR0H << 8);
+ if(drops_b != drops)
+ {
+ drops_b = drops;
+  (LATB.F6)  = 1;
+ delay_ms(10);
+  (LATB.F6)  = 0;
+ }
+ delay_ms(20);
  }
 }
 
@@ -345,10 +367,20 @@ void main()
 void config (void)
 {
 
+ ANSELA=0;
+ ANSELB=0;
+ ANSELC=0;
+
 
  TRISB.F7=0;
  TRISB.F6=0;
  TRISB.F5=0;
+
+
+ INTCON = 0XD0;
+ INTCON.F1 = 0;
+ INTCON2.F6 = 0;
+ TRISB.F0=1;
 
 
  T0CON = 0XA8;
@@ -356,11 +388,16 @@ void config (void)
  TMR0H = 0X00;
  TRISA.F4 = 1;
 
- ANSELC=0;
- ANSELA=0;
- TRISC =0;
- TRISA =0;
 
+ PORTA = 0;
+ PORTB = 0;
+ PORTC = 0;
+
+ home = 1;
+}
+
+void modules (void)
+{
 
  UART1_Init(9600);
  Delay_ms(100);
@@ -368,8 +405,6 @@ void config (void)
  UART1_Write_Text("Configuration init: ");
  uart1_write_text("\r\n");
 
-
  th02Init();
  Accelconfig();
-
 }
