@@ -2,28 +2,28 @@
 void Escribir(unsigned char direccion_esclavo,
                            unsigned char direccion_memoria,
                                     unsigned char dato){
-                      I2C1_Start();
-                      I2C1_Wr(direccion_esclavo);
-                      I2C1_Wr(direccion_memoria);    // MEMORIA L
-                      I2C1_Wr(dato); // DATO
-                      I2C1_Stop();
+                      I2C2_Start();
+                      I2C2_Wr(direccion_esclavo);
+                      I2C2_Wr(direccion_memoria);    // MEMORIA L
+                      I2C2_Wr(dato); // DATO
+                      I2C2_Stop();
 }
 
 int Leer(unsigned char direccion_esclavo,
                            unsigned char direccion_memoria){
                       int valor;
 
-                    I2C1_Start();
-                    I2C1_Wr(direccion_esclavo);
-                    I2C1_Wr(direccion_memoria);    // MEMORIA L
+                    I2C2_Start();
+                    I2C2_Wr(direccion_esclavo);
+                    I2C2_Wr(direccion_memoria);    // MEMORIA L
 
-                    I2C1_Repeated_Start();
-                    I2C1_Wr(direccion_esclavo+1);
+                    I2C2_Repeated_Start();
+                    I2C2_Wr(direccion_esclavo+1);
                     
                     LATB.F5 = 1;   //BLUE
-                    valor=I2C1_Rd(0);
+                    valor=I2C2_Rd(0);
                            LATB.F5 = 0;
-                    I2C1_Stop();
+                    I2C2_Stop();
                     return valor;
 }
 
