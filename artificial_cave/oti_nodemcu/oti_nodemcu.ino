@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
+#include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -35,8 +36,9 @@ Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO
 
 // Setup a feed called 'photocell' for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-Adafruit_MQTT_Publish humedad = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humedad");
-Adafruit_MQTT_Publish temperatura = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperatura");
+Adafruit_MQTT_Publish humidity = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humidity");
+Adafruit_MQTT_Publish temperature = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperature");
+Adafruit_MQTT_Publish state = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/state");
 // Setup a feed called 'onoff' for subscribing to changes.
 Adafruit_MQTT_Subscribe controlhum = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/controlhum");
 
@@ -44,8 +46,8 @@ Adafruit_MQTT_Subscribe controlhum = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME
 
 // Bug workaround for Arduino 1.6.6, it seems to need a function declaration
 // for some reason (only affects ESP8266, likely an arduino-builder bug).
-int hum,temp,hum0,temp0,hum2,temp2,tempa;
-int x=0,y=0,r=0,s=0,u=0,v=0,w=0,z=0;
+int hum,temp,st=0;
+int x=0,y=0,r=0,s=0;
 void MQTT_connect();
 char set;
 int t=1,resp; 
@@ -81,7 +83,7 @@ void setup() {
     display.drawPixel (0, 63, WHITE);
     display.drawPixel (127, 63, WHITE);
     testfilltriangle();
-    display.setTextSize (2);
+    display.setTextSize(2);
     display.setTextColor (WHITE);
     display.setCursor (0,10);
     display.print("Oti");
@@ -91,12 +93,15 @@ void setup() {
     delay(5000);
     int s;
     s = Serial.read();
+    Serial.print(s);
     delay(1000);
 
     Serial.print('B');
     delay(5000);
     int r;
     r = Serial.read();
+    Serial.print(r);
+    delay(1000);
 }
 
 
@@ -140,10 +145,12 @@ void loop() {
   delay(1000);
   if(x < set){
     Serial.print('O');
-    delay(10000);
-  }else {
+    delay(10000); 
+    st = 1;
+  }else { 
     Serial.print('I');
     delay(10000);
+    st = 0;
   }
 
   dataupdate();
@@ -153,7 +160,7 @@ void loop() {
   Serial.print(x);
   Serial.print("...");
 
-  if (! humedad.publish(x++)) {
+  if (! humidity.publish(x++)) {
     Serial.println(F("Failed"));
   } else {
     Serial.println(F("oK!"));
@@ -165,21 +172,24 @@ void loop() {
   Serial.print(y);
   Serial.print("...");
   
-  if (! temperatura.publish(y++)) {
+  if (! temperature.publish(y++)) {
     Serial.println(F("Failed"));
   } else {
     Serial.println(F("oK!"));
   }
-
-  // ping the server to keep the mqtt connection alive
-  // NOT required if you are publishing once every KEEPALIVE seconds
-  /*
-  if(! mqtt.ping()) {
-    mqtt.disconnect();
   }
-  */
-  }
-}
+  if(st < 2){
+    Serial.print(F("\nSending state val "));
+    Serial.print(st);
+    Serial.print("...");
+  
+    if (! state.publish(st++)) {
+      Serial.println(F("Failed"));
+    } else {
+      Serial.println(F("oK!"));
+    }
+  } 
+ }//loop
 
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care if connecting.
@@ -211,23 +221,24 @@ void dataupdate(void) {
   display.clearDisplay();
   display.display();
 
-  display.setTextSize(2);             // Normal 1:1 pixel scale
+  display.setTextSize(2
+  );             // Normal 1:1 pixel scale
   display.setTextColor(WHITE);        // Draw white text
   display.setCursor(0,0);             // Start at top-left corner
   display.println();
-  display.print(F(" Hum:"));
+  display.print(" Hum:");
   display.print(hum);
   display.println("%");
-  display.setTextColor(WHITE);        // Draw 'inverse' text
+ // display.setTextColor(WHITE);        // Draw 'inverse' text
   display.print(" Temp:");
   display.print(temp);
-  display.print((char)223);
+ //display.print((char)223);
   display.print("C");
   display.display();
   delay(2000);
 }
 void testfilltriangle(void) {
-  display.clearDisplay();
+ display.clearDisplay();
 
   for(int16_t i=max(display.width(),display.height())/2; i>0; i-=5) {
     // The INVERSE color is used so triangles alternate white/black
@@ -238,7 +249,6 @@ void testfilltriangle(void) {
     display.display();
     delay(1);
   }
-  
 
   delay(2000);
 }

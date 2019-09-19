@@ -1,51 +1,36 @@
-#include <MPU6050_tockn.h>
-
-#include <Adafruit_SSD1306.h>
-#include <splash.h>
-#define OLED_RESET 4
-Adafruit_SSD1306 display(OLED_RESET);
-#include <Adafruit_Sensor.h>
-#include <DHT.h>
-#include <DHT_U.h>
 #include <SoftwareSerial.h>
-#include <TH02_dev.h>
-#include <Wire.h> 
-
+#include "DHT.h"
 
 SoftwareSerial mySerial (3, 4); //rx/tx
-//*****************************************CONFIGURACIÓN DEL ACELEROMETRO*********************************************
-
-//********************************************************************************************************************
+DHT dht(2, DHT11);
+int h;
 
 float hum,temp,hum1,temp1;
 int relay = 7,led = 6;
 int i = 0;
-char k,d2,d1[2] = {},point;
+char k,d1[2] = {},point;
 
 
 void setup() {
   Serial.begin(9600);
   mySerial.begin(9600);
-  Wire.begin();
+  dht.begin();
   pinMode(relay, OUTPUT);
-  pinMode(led,OUTPUT);
+  pinMode(led,OUTPUT); 
 }
 
 void loop() {
         while(mySerial.available()){                // Leer datos del serial
        d1[k]=mySerial.read();                  
-       int t;
-       if(t<=3){
-           t++;   
-       
           switch(d1[k]){                                //Orden para tomar el dato de humedad
             case 'A':
              {   
                 Serial.print("Humidity Value:");
-                leerHumedad();                  //Función que promedia la lectura
-                 Serial.print(hum1);
+                h = dht.readHumidity();
+                //leerHumedad();                  //Función que promedia la lectura
+                 Serial.print(h,DEC);
                  Serial.println("%");
-                 mySerial.write(hum1);
+                 mySerial.write(h);
                  break;
              }
 
@@ -70,30 +55,17 @@ void loop() {
               break; 
             }
            }//switch
-           }//if  
          }//while
   }//loop
   
-
-  void leerHumedad(void)
-  {
-    for(i=0;i<15;i++)
-    {
-        hum = analogRead(A1);
-        hum1 = hum1 + hum;
-        
-   }
-    hum1 = (hum/15); 
-   }  
-
-   void leerTemperatura(void)
+ void leerTemperatura(void)
    {
     for(i=0;i<50;i++)
     {
         temp = analogRead(A0);
         temp = (temp * 5 * 100)/1024;
         temp1 = temp + temp1;
-   }
+    }//for
     temp1 = (temp1/50);
-   }
+   }//funtion
 
